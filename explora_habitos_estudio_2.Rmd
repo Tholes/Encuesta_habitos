@@ -405,14 +405,10 @@ text(g1, c(8,10,12,10,4,14,16,10,30,18,10), #Aquí pueden modificar las alturas.
 
 ```{r}
 library(ggplot2)
-genero
-papa <- table(encuesta_habitos$PAPA)
-#Base de datos discriminada por el genero
-masculino <- filter(encuesta_habitos,encuesta_habitos$genero=="Masculino", na.rm=TRUE)
-femenino <- filter(encuesta_habitos,encuesta_habitos$genero=="Femenino", na.rm=TRUE)
-#Tabla de frecuencias de PAPA discriminada por el genero
-papaxmasculino <- table(masculino$PAPA)
-papaxfemenino <- table(femenino$PAPA)
-papaxmasculino
-papaxfemenino
+#Tabla de frecuencias del papa por genero
+papaxgenero <- table(encuesta_habitos$genero, encuesta_habitos$PAPA)
+#Data frame para poder ingresar a la gráfica
+total <- data.frame(papaxgenero)
+#Gráfica
+ggplot(total, aes(fill=Var1, x=Var2, y=Freq))+geom_bar(position="dodge",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Genero", title="PAPA discriminado por género")
 ```

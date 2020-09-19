@@ -410,5 +410,6 @@ papaxgenero <- table(encuesta_habitos$genero, encuesta_habitos$PAPA)
 #Data frame para poder ingresar a la gráfica
 total <- data.frame(papaxgenero)
 #Gráfica
-ggplot(total, aes(fill=Var1, x=Var2, y=Freq))+geom_bar(position="dodge",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Genero", title="PAPA discriminado por género")
+ggplot(total, aes(fill=Var1, x=Var2, y=Freq))+geom_bar(position="dodge",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Genero", title="PAPA discriminado por género")+geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)
+
 ```

@@ -179,7 +179,21 @@ text(g2 + 0.2,
 
 ```
 
-# PAPA(PENDIENTE):
+# PAPA {.tabset}
+## Grafica
+```{r}
+p<- sort(encuesta$PAPA)
+frecpapa<-as.vector(table(p))
+p<-unique(p)
+dfpapa<- data.frame(papa=p,frecuencia=frecpapa)
+ggplot(encuesta, aes(encuesta$PAPA))+ geom_freqpoly(bins=20,color='mediumvioletred',lwd=1)+ ggtitle('Polígono de Frecuencia del PAPA')+ scale_y_continuous(breaks = seq(0,20,2)) + ylab('Frecuencia')+xlab('P.A.P.A')+ theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5))+ theme(axis.ticks.x = element_blank(),axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10)),axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)), axis.title.x = element_text(size = 15),axis.title.y = element_text(size = 15))
+```
+
+
+## Tabla de Frecuencia
+```{r}
+kable(table(encuesta$PAPA), col.names = c('PAPA','Frecuencia'), align = 'cc')
+```
 
 # Estrato
 

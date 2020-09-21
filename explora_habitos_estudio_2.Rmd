@@ -445,3 +445,11 @@ radarchart(para_graficar,axistype=1 ,
     #Etiquetas o labels
     vlcex=0.8, title=paste("Promedio del PAPA por carrera"), cex.main=1 )
 ```
+
+# PAPA-Computador de mesa
+
+```{r}
+papaxpc <- table(encuesta_habitos$PAPA, encuesta_habitos$computador_mesa)
+graf <- data.frame(papaxpc)
+ggplot(graf, aes(fill=Var2, x=Var1,  y=Freq))+geom_bar(position="stack",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Computador", title="PAPA discriminado por Computador")+geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)
+```

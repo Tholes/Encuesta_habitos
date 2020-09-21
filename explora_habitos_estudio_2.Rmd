@@ -395,6 +395,39 @@ text(g1, c(6,6,10,102), #Aquí pueden modificar las alturas.
 
 ```
 
+
+# Origen  del Covid-19 {.tabset}
+
+## Distribución porcentual
+```{r}
+
+a<-encuesta$origen_covid_19
+a<-gsub('\\<Es.*n[[:punct:]]','Conspiracion',a)
+a<-gsub('\\<Fue[[:blank:]]fabricado.*rio[[:punct:]]','Laboratorio',a)
+a<-gsub('\\<Fue.*nos[[:punct:]]','Animales',a)
+a<-gsub('\\<No.*do[[:punct:]]','Gobiernos',a)
+a<-gsub('\n',', ',a)
+aporc<-round(table(a)/sum(table(a))*100,1)
+q<-as.data.frame(sort(table(a),decreasing = TRUE))
+library(RColorBrewer)
+palets<- brewer.pal(8,"Set2")
+pie(sort(aporc,decreasing = TRUE),main='Causas del Covid-19',col=palets, border = 'white',lty=1,radius = 1,labels = '')
+legend(1,0,legend = paste(as.character(sort(aporc,decreasing = TRUE)),'%'),pch=15,col=palets,cex = .7)
+legend(-2,1,legend = q$a ,pch=15,col=palets,cex = .7)
+kable(round(sort(table(a),decreasing = TRUE)/sum(table(a))*100,1),col.names = c('Causa','porcentaje'))
+```
+
+
+## Grafica
+```{r}
+q<-as.data.frame(table(a))
+
+ggplot(q,aes(x=q$Freq,y=q$a)) + geom_bar(stat = "identity", col='darkslategray3',fill='darkslategray3',alpha=.7)+scale_x_continuous(breaks = seq(0,80,5)) + ylab('Causa')+xlab('Número de personas')+ ggtitle('Causas del Covid-19')+theme(
+  panel.grid.minor.y = element_blank(),panel.grid.minor.x = element_blank(), axis.ticks.y = element_blank(), axis.title.x = element_text(size=15, vjust = -.5), axis.title.y = element_text(size = 15,vjust = 3),axis.text = element_text(family = "Helvetica", face = "bold", size = (10)),plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)
+)
+
+```
+
 # Estadisticas gov
 
 ```{r}

@@ -373,3 +373,58 @@ text(g1, c(8,10,12,10,4,14,16,10,30,18,10), #Aquí pueden modificar las alturas.
 ```
 #### Análisis descriptivo: (pendiente).
 
+
+# PAPA-Género
+
+```{r}
+library(ggplot2)
+#Tabla de frecuencias del papa por genero
+papaxgenero <- table(encuesta_habitos$genero, encuesta_habitos$PAPA)
+#Data frame para poder ingresar a la gráfica
+total <- data.frame(papaxgenero)
+#Gráfica
+ggplot(total, aes(fill=Var1, x=Var2, y=Freq))+geom_bar(position="dodge",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Genero", title="PAPA discriminado por género")+geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)
+```
+
+# PAPA-Fecha de nacimiento
+
+PENDIENTE
+
+# PAPA-Carrera
+
+```{r}
+library(fmsb) #Librería para la araña
+library(sqldf) #Librería sql
+#Query en sql para poder sacar datos necesarios para graficar
+query <- sqldf('SELECT carrera_dep,AVG(PAPA) from encuesta_habitos GROUP BY carrera_dep')
+#Lastimosamente no supe como automatizar para que quede organizado para graficar
+#Pero usé la información dada para hacer el data frame a mano
+#Data frame a mano
+para_graficar <- data.frame(3.7,3.6,3.4,3.5,3.7,3.6,4.1,4.0)
+#Nombre de las columnas del data frame
+colnames(para_graficar) <- c("Estadistica","Ing administrativa","Ing biologica","Ing de control","Ing de sistemas e informatica","Ing fisica"," Ing industrial","Matematicas")
+#Se debe poner cuál es el valor minimo y maximo que puede alcanzar la grafica
+para_graficar <- rbind(rep(5,8) , rep(3,8) , para_graficar)
+#Grafica
+radarchart(para_graficar,axistype=1 , 
+ 
+    #Poligono interno
+    pcol=rgb(0.2,0.5,0.5,0.9) , pfcol=rgb(0.2,0.5,0.5,0.5) , plwd=4 , 
+ 
+    #Malla
+    cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(3,5,0.5), cglwd=0.8,
+ 
+    #Etiquetas o labels
+    vlcex=0.8, title=paste("Promedio del PAPA por carrera"), cex.main=1 )
+```
+
+# PAPA-Computador de mesa
+
+```{r}
+papaxpc <- table(encuesta_habitos$PAPA, encuesta_habitos$computador_mesa)
+graf <- data.frame(papaxpc)
+ggplot(graf, aes(fill=Var2, x=Var1,  y=Freq))+geom_bar(position="stack",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Computador", title="PAPA discriminado por Computador")+geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)
+```
+
+
+

@@ -128,10 +128,6 @@ summary(edad)
 
 Del gráfico se observa la distribución porcentual de los estudiantes por genero. Se observa que la cantidad de personas que pertenecen al genero masculino es evidentemente mayor a la cantidad de personas del genero fememino, esto es con una diferencia del 46.96% entre ambos generos. 
 
-# Fecha de nacimiento(PENDIENTE)
-
-# Edad(PENDIENTE):
-
 # Carrera
 
 ```{r}
@@ -176,7 +172,21 @@ text(g2 + 0.2,
 
 En este gráfico se observa la distribución porcental de los estudiantes por carrera. Se puede notar que apróximadamente el 90% de los estudiantes pertenecen a las carreras de Estadística e ingeniería de sistemas e informática y con menos frecuencia se encuentran las carreras de ingeniería biológica e ingeniería de control.
 
-# PAPA(PENDIENTE):
+# PAPA {.tabset}
+## Grafica
+```{r}
+p<- sort(encuesta_habitos$PAPA)
+frecpapa<-as.vector(table(p))
+p<-unique(p)
+dfpapa<- data.frame(papa=p,frecuencia=frecpapa)
+ggplot(encuesta_habitos, aes(encuesta_habitos$PAPA))+ geom_freqpoly(bins=20,color='mediumvioletred',lwd=1)+ ggtitle('Polígono de Frecuencia del PAPA')+ scale_y_continuous(breaks = seq(0,20,2)) + ylab('Frecuencia')+xlab('P.A.P.A')+ theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5))+ theme(axis.ticks.x = element_blank(),axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10)),axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)), axis.title.x = element_text(size = 15),axis.title.y = element_text(size = 15))
+```
+
+
+## Tabla de Frecuencia
+```{r}
+kable(table(encuesta_habitos$PAPA), col.names = c('PAPA','Frecuencia'), align = 'cc')
+```
 
 # Estrato
 

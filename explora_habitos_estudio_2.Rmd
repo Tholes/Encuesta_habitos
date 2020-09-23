@@ -73,11 +73,24 @@ fec_table<-table(format(fechas,"%Y"))
 e<-kable(fec_table, col.names = c('Año','Frecuencia'), align = 'lc')
 
 ggplot(encuesta_habitos, aes(x=seq(0,100,length.out = 132),y=as.numeric(format(fechas,"%Y")))) + 
-    geom_boxplot(fill="slateblue", alpha=0.4) + theme_bw()+
-    xlab("")+ylab('Año')+ggtitle('Boxplot de la variable Años')+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) + coord_cartesian(ylim = c(1956,2020)) + scale_y_continuous(breaks = seq(1950,2020,5)) + theme(axis.text.x = element_blank(),axis.ticks.x = element_blank(),axis.title.y = element_text(size = 15, vjust = 1.3), axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+    geom_boxplot(fill="slateblue", alpha=0.4) + 
+    theme_bw()+
+    xlab("") + ylab('Año') + ggtitle('Boxplot de la variable Años') +
+    theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5))  +
+    coord_cartesian(ylim = c(1956,2020)) + scale_y_continuous(breaks = seq(1950,2020,5)) + 
+    theme(axis.text.x = element_blank()
+    , axis.ticks.x = element_blank()
+    , axis.title.y = element_text(size = 15, vjust = 1.3),
+    axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+    
  ggplot(encuesta_habitos, aes(x=seq(0,100,length.out = 132),y=as.numeric(format(fechas,"%Y")))) + 
-    geom_violin(fill="slateblue", alpha=0.4) + theme_bw()+
-    xlab("")+ylab('Año')+ggtitle('Violín de la variable Años')+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) + coord_cartesian(ylim = c(1956,2020)) + scale_y_continuous(breaks = seq(1950,2020,5)) + theme(axis.text.x = element_blank(),axis.ticks.x = element_blank(),axis.title.y = element_text(size = 15, vjust = 1.3), axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+    geom_violin(fill="slateblue", alpha=0.4) + 
+    theme_bw()+
+    xlab("") + ylab('Año') + ggtitle('Violín de la variable Años') + 
+    theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) +
+    coord_cartesian(ylim = c(1956,2020)) + scale_y_continuous(breaks = seq(1950,2020,5)) + 
+    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.y = element_text(size = 15, vjust = 1.3),
+    axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
 ```
 
 
@@ -99,8 +112,21 @@ dias<- as.vector(table(dtable))
 dias<-append(dias,0,after = 2)
 df<- data.frame('dias'= dias)
 dtable1<-sort(unique(c(dtable,'03')))
-ggplot(df,aes(x=dtable1,y=dias))+geom_segment(aes(x=dtable1,xend=dtable1,y=0,yend=dias), color='grey70',lwd=1)+theme_light() + scale_y_continuous(breaks = seq(0,15,1))+ggtitle('Lollipop de la variable Días' ) +
-  theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5),axis.title.x = element_text( size = (15)), axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)),axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10)),axis.title.y = element_text(size = 15),panel.grid.major.x = element_blank(),panel.border = element_blank(),axis.ticks.x = element_blank())+ylab('Número de personas')+ xlab('Día de cumpleaños' )+ geom_point(color="brown", size=3)
+
+ggplot(df,aes(x=dtable1,y=dias)) + 
+geom_segment(aes(x=dtable1,xend=dtable1,y=0,yend=dias), color='grey70',lwd=1) + 
+theme_light() +
+scale_y_continuous(breaks = seq(0,15,1)) + ggtitle('Lollipop de la variable Días' ) +
+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5), 
+axis.title.x = element_text( size = (15)),
+axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)), 
+axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10)), 
+axis.title.y = element_text(size = 15), 
+panel.grid.major.x = element_blank(), 
+panel.border = element_blank(), 
+axis.ticks.x = element_blank()) + 
+ylab('Número de personas')+ xlab('Día de cumpleaños' ) +
+geom_point(color="brown", size=3)
 ```
 
 # Edad {.tabset}
@@ -111,14 +137,28 @@ ggplot(df,aes(x=dtable1,y=dias))+geom_segment(aes(x=dtable1,xend=dtable1,y=0,yen
 fechadepu<- fechas
 fechadepu<-fechadepu[!format(fechadepu,"%Y") %in% as.character(seq(2005,2020,1))]
 edad<-round(as.numeric(Sys.Date() - fechadepu )/ 365,0)
-ggplot(as.data.frame(edad), aes(x=seq(0,100,length.out = 125),y=edad)) + 
-    geom_boxplot(fill="darkorange", alpha=0.4) + theme_grey()+
-    xlab("")+ylab('Años')+ggtitle('Boxplot de la Edad')+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) + coord_cartesian(ylim = c(15,70)) +scale_y_continuous(breaks = seq(15,70,5)) + theme(axis.text.x = element_blank(),axis.ticks.x = element_blank(),axis.title.y = element_text(size = 15, vjust = 1.3), axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
-ggplot(as.data.frame(edad), aes(x=seq(0,100,length.out = 125),y=edad)) + 
-    geom_violin(fill="darkorange", alpha=0.4) + theme_grey()+
-    xlab("")+ylab('Años')+ggtitle('Violín de la Edad')+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) + coord_cartesian(ylim = c(15,70)) + scale_y_continuous(breaks = seq(15,70,5)) + theme(axis.text.x = element_blank(),axis.ticks.x = element_blank(),axis.title.y = element_text(size = 15, vjust = 1.3), axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
-```
 
+ggplot(as.data.frame(edad), aes(x=seq(0,100,length.out = 125),y=edad)) + 
+    geom_boxplot(fill="darkorange", alpha=0.4) + 
+    theme_grey() +
+    xlab("") + ylab('Años') + ggtitle('Boxplot de la Edad') + 
+    theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) + 
+    coord_cartesian(ylim = c(15,70)) + scale_y_continuous(breaks = seq(15,70,5)) + 
+    theme(axis.text.x = element_blank(), 
+    axis.ticks.x = element_blank(), 
+    axis.title.y = element_text(size = 15, vjust = 1.3), 
+    axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+    
+ggplot(as.data.frame(edad), aes(x=seq(0,100,length.out = 125),y=edad)) + 
+    geom_violin(fill="darkorange", alpha=0.4) + theme_grey() +
+    xlab("") + ylab('Años') + ggtitle('Violín de la Edad') + 
+    theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5))+ 
+    coord_cartesian(ylim = c(15,70)) + scale_y_continuous(breaks = seq(15,70,5)) +
+    theme(axis.text.x = element_blank(), 
+    axis.ticks.x = element_blank(), 
+    axis.title.y = element_text(size = 15, vjust = 1.3),
+    axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+```
 ## Resumen numérico
 ```{r}
 summary(edad)
@@ -179,9 +219,17 @@ p<- sort(encuesta_habitos$PAPA)
 frecpapa<-as.vector(table(p))
 p<-unique(p)
 dfpapa<- data.frame(papa=p,frecuencia=frecpapa)
-ggplot(encuesta_habitos, aes(encuesta_habitos$PAPA))+ geom_freqpoly(bins=20,color='mediumvioletred',lwd=1)+ ggtitle('Polígono de Frecuencia del PAPA')+ scale_y_continuous(breaks = seq(0,20,2)) + ylab('Frecuencia')+xlab('P.A.P.A')+ theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5))+ theme(axis.ticks.x = element_blank(),axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10)),axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)), axis.title.x = element_text(size = 15),axis.title.y = element_text(size = 15))
-```
 
+ggplot(encuesta_habitos, aes(encuesta_habitos$PAPA)) +
+geom_freqpoly(bins=20,color='mediumvioletred',lwd=1) + 
+ggtitle('Polígono de Frecuencia del PAPA') +
+scale_y_continuous(breaks = seq(0,20,2)) + ylab('Frecuencia') + xlab('P.A.P.A')+ 
+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5))+ 
+theme(axis.ticks.x = element_blank(),
+axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10)), 
+axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)), 
+axis.title.x = element_text(size = 15),axis.title.y = element_text(size = 15))
+```
 
 ## Tabla de Frecuencia
 ```{r}

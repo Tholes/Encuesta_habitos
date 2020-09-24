@@ -233,7 +233,7 @@ axis.title.x = element_text(size = 15),axis.title.y = element_text(size = 15))
 
 ## Tabla de Frecuencia
 ```{r}
-kable(table(encuesta_habitos$PAPA), col.names = c('PAPA','Frecuencia'), align = 'cc')
+kable(table(round(encuesta_habitos$PAPA,1)), col.names = c('PAPA','Frecuencia'), align = 'cc')
 ```
 
 # Estrato

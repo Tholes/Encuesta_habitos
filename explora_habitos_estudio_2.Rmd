@@ -62,10 +62,14 @@ text(g1, c(30,78),
                             big.mark = "."), "%"))
 ```
 
+#### Análisis descriptivo:
+
+Del gráfico se observa la distribución porcentual de los estudiantes por genero. Se observa que la cantidad de personas que pertenecen al genero masculino es evidentemente mayor a la cantidad de personas del genero fememino, esto es con una diferencia del 46.96% entre ambos generos.
 
 # Fecha de nacimiento {.tabset}
 
 ## Gráfica
+
 ```{r}
 
 fechas<- as.Date(encuesta_habitos$fecha_dep,"%d/%m/%Y")
@@ -91,7 +95,9 @@ ggplot(encuesta_habitos, aes(x=seq(0,100,length.out = 132),y=as.numeric(format(f
     coord_cartesian(ylim = c(1956,2020)) + scale_y_continuous(breaks = seq(1950,2020,5)) + 
     theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.y = element_text(size = 15, vjust = 1.3),
     axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+ 
 ```
+
 
 
 ## Resumen numerico
@@ -103,30 +109,52 @@ summary(as.numeric(format(fechas,"%Y")))
 ## Tabla de frecuencia
 ```{r}
 e
+
 ```
 
-## Grafica Dias
+## Grafica Mes - Dias
 ```{r}
-dtable<- format(fechas,'%d')
-dias<- as.vector(table(dtable))
-dias<-append(dias,0,after = 2)
-df<- data.frame('dias'= dias)
-dtable1<-sort(unique(c(dtable,'03')))
+mes<-as.vector(table(format(fechas,'%m')))
+dff<-data.frame('mes'=mes)
+dtable2<-sort(unique(format(fechas,'%m')))
 
-ggplot(df,aes(x=dtable1,y=dias)) + 
-geom_segment(aes(x=dtable1,xend=dtable1,y=0,yend=dias), color='grey70',lwd=1) + 
+
+ggplot(dff,aes(x=dtable2,y=mes)) + 
+geom_segment(aes(x=dtable2,xend=dtable2,y=0,yend=mes), color='grey70',lwd=1) + 
 theme_light() +
-scale_y_continuous(breaks = seq(0,15,1)) + ggtitle('Lollipop de la variable Días' ) +
+  scale_x_discrete(labels= c('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre')) +
+scale_y_continuous(breaks = seq(0,16,1)) + 
+ggtitle('Lollipop de la variable Mes' ) +
 theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5), 
-axis.title.x = element_text( size = (15)),
+axis.title.x = element_text( size = (15),vjust = 7),
+axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)), 
+axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10), angle = 45), 
+axis.title.y = element_text(size = 15), 
+panel.grid.major.x = element_blank(), 
+panel.border = element_blank(), 
+axis.ticks.x = element_blank()) + 
+ylab('Número de personas')+ xlab('Mes' ) +
+geom_point(color="brown", size=3)
+
+
+dff<- data.frame('mes'=as.vector(format(fechas,'%m')),
+                 'dia'=as.vector(format(fechas,'%d')))
+dias_sep<-subset(dff,mes=='09')
+
+ggplot(as.data.frame(sort(unique(dias_sep$dia))), aes(x=sort(unique(dias_sep$dia)), y=as.vector(table(dias_sep$dia)))) + 
+geom_segment(aes(x=sort(unique(dias_sep$dia)),xend=sort(unique(dias_sep$dia)),y=0,yend=as.vector(table(dias_sep$dia))), color='grey70',lwd=1) + 
+theme_light()+
+scale_y_continuous(breaks = seq(0,16,1)) + ggtitle('Lollipop del mes de Septiembre' ) +
+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5), 
+axis.title.x = element_text( size = (15),vjust = -1),
 axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)), 
 axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10)), 
 axis.title.y = element_text(size = 15), 
 panel.grid.major.x = element_blank(), 
 panel.border = element_blank(), 
 axis.ticks.x = element_blank()) + 
-ylab('Número de personas')+ xlab('Día de cumpleaños' ) +
-geom_point(color="brown", size=3)
+ylab('Número de personas')+ xlab('Día de Septiembre' ) +
+geom_point(color="orange", size=3)
 ```
 
 # Edad {.tabset}
@@ -158,15 +186,18 @@ ggplot(as.data.frame(edad), aes(x=seq(0,100,length.out = 125),y=edad)) +
     axis.ticks.x = element_blank(), 
     axis.title.y = element_text(size = 15, vjust = 1.3),
     axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+
+
 ```
+
+
+
 ## Resumen numérico
 ```{r}
 summary(edad)
  
 ```
-#### Análisis descriptivo:
-
-Del gráfico se observa la distribución porcentual de los estudiantes por genero. Se observa que la cantidad de personas que pertenecen al genero masculino es evidentemente mayor a la cantidad de personas del genero fememino, esto es con una diferencia del 46.96% entre ambos generos. 
+ 
 
 # Carrera
 

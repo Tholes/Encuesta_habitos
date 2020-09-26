@@ -26,18 +26,16 @@ encuesta_habitos <- read.csv2("Encuesta_habitos.csv",
                        dec = ".")
 ```
 
-# Genero
+# Genero {.tabset}
 
-#### Tabla de frecuencia.
 
 ```{r}
 #tabla de frecuencias de género.
 genero <- table(encuesta_habitos$genero)
-genero
 genero_porcentaje <- round(genero / sum(genero)*100,2)
 ```
 
-#### Grafica.
+## Grafica
 ```{r}
 #Trabajamos el lienzo
 par(mar = c(8, 5, 3, 3))# le damos margenes
@@ -51,7 +49,7 @@ plot(seq(0,3,length.out = 100), 1:100,
      )
 abline(h = seq(0,100,10), col = "gray", lty = 3)
 g1 <- barplot(genero_porcentaje,
-        col = c("#d9ae94", "#f1dca7"),
+        col = c("#00afb9", "#fed9b7"),
         cex.names = 0.65,
         las=1,
         add = TRUE,
@@ -62,6 +60,16 @@ text(g1, c(30,78),
                             big.mark = "."), "%"))
 ```
 
+## Tabla de frecuencia
+```{r}
+genero
+```
+
+#
+
+#### Análisis descriptivo:
+
+Del gráfico se observa la distribución porcentual de los estudiantes por genero. Se observa que la cantidad de personas que pertenecen al genero masculino es evidentemente mayor a la cantidad de personas del genero fememino, esto es con una diferencia del 46.96% entre ambos generos. 
 
 # Fecha de nacimiento {.tabset}
 
@@ -73,11 +81,24 @@ fec_table<-table(format(fechas,"%Y"))
 e<-kable(fec_table, col.names = c('Año','Frecuencia'), align = 'lc')
 
 ggplot(encuesta_habitos, aes(x=seq(0,100,length.out = 132),y=as.numeric(format(fechas,"%Y")))) + 
-    geom_boxplot(fill="slateblue", alpha=0.4) + theme_bw()+
-    xlab("")+ylab('Año')+ggtitle('Boxplot de la variable Años')+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) + coord_cartesian(ylim = c(1956,2020)) + scale_y_continuous(breaks = seq(1950,2020,5)) + theme(axis.text.x = element_blank(),axis.ticks.x = element_blank(),axis.title.y = element_text(size = 15, vjust = 1.3), axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+    geom_boxplot(fill="slateblue", alpha=0.4) + 
+    theme_bw()+
+    xlab("") + ylab('Año') + ggtitle('Boxplot de la variable Años') +
+    theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5))  +
+    coord_cartesian(ylim = c(1956,2020)) + scale_y_continuous(breaks = seq(1950,2020,5)) + 
+    theme(axis.text.x = element_blank()
+    , axis.ticks.x = element_blank()
+    , axis.title.y = element_text(size = 15, vjust = 1.3),
+    axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+    
  ggplot(encuesta_habitos, aes(x=seq(0,100,length.out = 132),y=as.numeric(format(fechas,"%Y")))) + 
-    geom_violin(fill="slateblue", alpha=0.4) + theme_bw()+
-    xlab("")+ylab('Año')+ggtitle('Violín de la variable Años')+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) + coord_cartesian(ylim = c(1956,2020)) + scale_y_continuous(breaks = seq(1950,2020,5)) + theme(axis.text.x = element_blank(),axis.ticks.x = element_blank(),axis.title.y = element_text(size = 15, vjust = 1.3), axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+    geom_violin(fill="slateblue", alpha=0.4) + 
+    theme_bw()+
+    xlab("") + ylab('Año') + ggtitle('Violín de la variable Años') + 
+    theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) +
+    coord_cartesian(ylim = c(1956,2020)) + scale_y_continuous(breaks = seq(1950,2020,5)) + 
+    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.y = element_text(size = 15, vjust = 1.3),
+    axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
 ```
 
 
@@ -99,9 +120,24 @@ dias<- as.vector(table(dtable))
 dias<-append(dias,0,after = 2)
 df<- data.frame('dias'= dias)
 dtable1<-sort(unique(c(dtable,'03')))
-ggplot(df,aes(x=dtable1,y=dias))+geom_segment(aes(x=dtable1,xend=dtable1,y=0,yend=dias), color='grey70',lwd=1)+theme_light() + scale_y_continuous(breaks = seq(0,15,1))+ggtitle('Lollipop de la variable Días' ) +
-  theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5),axis.title.x = element_text( size = (15)), axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)),axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10)),axis.title.y = element_text(size = 15),panel.grid.major.x = element_blank(),panel.border = element_blank(),axis.ticks.x = element_blank())+ylab('Número de personas')+ xlab('Día de cumpleaños' )+ geom_point(color="brown", size=3)
+
+ggplot(df,aes(x=dtable1,y=dias)) + 
+geom_segment(aes(x=dtable1,xend=dtable1,y=0,yend=dias), color='grey70',lwd=1) + 
+theme_light() +
+scale_y_continuous(breaks = seq(0,15,1)) + ggtitle('Lollipop de la variable Días' ) +
+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5), 
+axis.title.x = element_text( size = (15)),
+axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)), 
+axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10)), 
+axis.title.y = element_text(size = 15), 
+panel.grid.major.x = element_blank(), 
+panel.border = element_blank(), 
+axis.ticks.x = element_blank()) + 
+ylab('Número de personas')+ xlab('Día de cumpleaños' ) +
+geom_point(color="brown", size=3)
 ```
+
+#
 
 # Edad {.tabset}
 
@@ -111,12 +147,27 @@ ggplot(df,aes(x=dtable1,y=dias))+geom_segment(aes(x=dtable1,xend=dtable1,y=0,yen
 fechadepu<- fechas
 fechadepu<-fechadepu[!format(fechadepu,"%Y") %in% as.character(seq(2005,2020,1))]
 edad<-round(as.numeric(Sys.Date() - fechadepu )/ 365,0)
+
 ggplot(as.data.frame(edad), aes(x=seq(0,100,length.out = 125),y=edad)) + 
-    geom_boxplot(fill="darkorange", alpha=0.4) + theme_grey()+
-    xlab("")+ylab('Años')+ggtitle('Boxplot de la Edad')+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) + coord_cartesian(ylim = c(15,70)) +scale_y_continuous(breaks = seq(15,70,5)) + theme(axis.text.x = element_blank(),axis.ticks.x = element_blank(),axis.title.y = element_text(size = 15, vjust = 1.3), axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+    geom_boxplot(fill="darkorange", alpha=0.4) + 
+    theme_grey() +
+    xlab("") + ylab('Años') + ggtitle('Boxplot de la Edad') + 
+    theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) + 
+    coord_cartesian(ylim = c(15,70)) + scale_y_continuous(breaks = seq(15,70,5)) + 
+    theme(axis.text.x = element_blank(), 
+    axis.ticks.x = element_blank(), 
+    axis.title.y = element_text(size = 15, vjust = 1.3), 
+    axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+    
 ggplot(as.data.frame(edad), aes(x=seq(0,100,length.out = 125),y=edad)) + 
-    geom_violin(fill="darkorange", alpha=0.4) + theme_grey()+
-    xlab("")+ylab('Años')+ggtitle('Violín de la Edad')+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) + coord_cartesian(ylim = c(15,70)) + scale_y_continuous(breaks = seq(15,70,5)) + theme(axis.text.x = element_blank(),axis.ticks.x = element_blank(),axis.title.y = element_text(size = 15, vjust = 1.3), axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
+    geom_violin(fill="darkorange", alpha=0.4) + theme_grey() +
+    xlab("") + ylab('Años') + ggtitle('Violín de la Edad') + 
+    theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5))+ 
+    coord_cartesian(ylim = c(15,70)) + scale_y_continuous(breaks = seq(15,70,5)) +
+    theme(axis.text.x = element_blank(), 
+    axis.ticks.x = element_blank(), 
+    axis.title.y = element_text(size = 15, vjust = 1.3),
+    axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
 ```
 
 ## Resumen numérico
@@ -124,19 +175,20 @@ ggplot(as.data.frame(edad), aes(x=seq(0,100,length.out = 125),y=edad)) +
 summary(edad)
  
 ```
-#### Análisis descriptivo:
 
-Del gráfico se observa la distribución porcentual de los estudiantes por genero. Se observa que la cantidad de personas que pertenecen al genero masculino es evidentemente mayor a la cantidad de personas del genero fememino, esto es con una diferencia del 46.96% entre ambos generos. 
+#
 
-# Carrera
+#### Analisis pendiente...
+
+# Carrera {.tabset}
+
 
 ```{r}
 carrera <- table(encuesta_habitos$carrera_dep)
-carrera
 carrera_porcentaje <- round(carrera/sum(carrera) * 100,2)
 ```
 
-
+## Grafica
 ```{r}
 #Trabajamos el lienzo
 par(mar = c(10, 8, 3, 3))# le damos margenes
@@ -150,7 +202,7 @@ plot(seq(0,10,length.out = 100), 1:100,
      )
 abline(h = seq(0,100,10), col = "gray", lty = 3)
 g2 <- barplot(carrera_porcentaje,
-        col = c("#d9ae94", "#f1dca7"),
+        col = c("#f94144", "#f3722c","#f8961e", "#f9c74f","#90be6d", "#43aa8b","#577590", "#00b4d8"),
         las=1,
         names.arg = "",
         add = TRUE,
@@ -168,18 +220,35 @@ text(g2 + 0.2,
     xpd = TRUE)
 ```
 
+## Tabla de frecuencia
+```{r}
+carrera
+```
+
+#
+
 #### Análisis descriptivo:
 
 En este gráfico se observa la distribución porcental de los estudiantes por carrera. Se puede notar que apróximadamente el 90% de los estudiantes pertenecen a las carreras de Estadística e ingeniería de sistemas e informática y con menos frecuencia se encuentran las carreras de ingeniería biológica e ingeniería de control.
 
 # PAPA {.tabset}
+
 ## Grafica
 ```{r}
 p<- sort(encuesta_habitos$PAPA)
 frecpapa<-as.vector(table(p))
 p<-unique(p)
 dfpapa<- data.frame(papa=p,frecuencia=frecpapa)
-ggplot(encuesta_habitos, aes(encuesta_habitos$PAPA))+ geom_freqpoly(bins=20,color='mediumvioletred',lwd=1)+ ggtitle('Polígono de Frecuencia del PAPA')+ scale_y_continuous(breaks = seq(0,20,2)) + ylab('Frecuencia')+xlab('P.A.P.A')+ theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5))+ theme(axis.ticks.x = element_blank(),axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10)),axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)), axis.title.x = element_text(size = 15),axis.title.y = element_text(size = 15))
+
+ggplot(encuesta_habitos, aes(encuesta_habitos$PAPA)) +
+geom_freqpoly(bins=20,color='#e71d36',lwd=1) + 
+ggtitle('Polígono de Frecuencia del PAPA') +
+scale_y_continuous(breaks = seq(0,20,2)) + ylab('Frecuencia') + xlab('P.A.P.A')+ 
+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5))+ 
+theme(axis.ticks.x = element_blank(),
+axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10)), 
+axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)), 
+axis.title.x = element_text(size = 15),axis.title.y = element_text(size = 15))
 ```
 
 
@@ -188,15 +257,16 @@ ggplot(encuesta_habitos, aes(encuesta_habitos$PAPA))+ geom_freqpoly(bins=20,colo
 kable(table(encuesta_habitos$PAPA), col.names = c('PAPA','Frecuencia'), align = 'cc')
 ```
 
-# Estrato
+#
+
+# Estrato {.tabset}
 
 ```{r}
 estrato <- table(encuesta_habitos$estrato)
-estrato
 estrato_porcentaje <- round(estrato/sum(estrato)*100,2)
 ```
 
-
+## Gráfica
 ```{r}
 #Trabajamos el lienzo
 par(mar = c(8, 5, 3, 3))# le damos margenes
@@ -210,7 +280,7 @@ plot(seq(0,7,length.out = 100), 1:100,
      )
 abline(h = seq(0,100,10), col = "gray", lty = 3)
 g1 <- barplot(estrato_porcentaje,
-        col = c("#d9ae94", "#f1dca7"),
+        col = c("#f94144", "#f3722c","#f8961e", "#f9c74f","#90be6d", "#43aa8b","#577590"),
         cex.names = 0.65,
         las=1,
         add = TRUE,
@@ -220,20 +290,27 @@ text(g1, c(8,20,40,50,12,8),
                             digits = 6, decimal.mark = ",", 
                             big.mark = "."), "%"))
 ```
+
+## Tabla de frecuencia
+```{r}
+estrato
+```
+#
+
 #### Análisis descriptivo:
 
 Del gráfico se observa la distribución porcentual de los estudiantes por estrato. Se puede evidencia que aproximadamente el 78% de los estudiantes pertenecen a los estratos 2 y 3.
 
 
 
-# Computador de mesa:
+# Computador de mesa {.tabset}
 
 ```{r}
 computador_mesa <- table(encuesta_habitos$computador_mesa)
-computador_mesa
 computador_mesa_porcentaje <- round(computador_mesa/sum(computador_mesa)*100,2)
 ```
 
+## Gráfica
 ```{r}
 #Trabajamos el lienzo
 par(mar = c(8, 5, 3, 3))# le damos margenes
@@ -247,7 +324,7 @@ plot(seq(0,5,length.out = 100), 1:100,
      )
 abline(h = seq(0,100,10), col = "gray", lty = 3)
 g1 <- barplot(computador_mesa_porcentaje,
-        col = c("#d9ae94", "#f1dca7"),
+        col = c("#f94144", "#f3722c","#f8961e", "#f9c74f","#90be6d", "#43aa8b","#577590"),
         cex.names = 0.65,
         las=1,
         add = TRUE,
@@ -257,21 +334,27 @@ text(g1, c(75,8,8,35),
                             digits = 6, decimal.mark = ",", 
                             big.mark = "."), "%"))
 ```
+
+## Tabla de frecuencia
+```{r}
+computador_mesa
+```
+
+#
+
 #### Análisis descriptivo:
 
 De este gráfico claramente se observa la distribución porcentual de los estudiantes respecto a si poseen o no computador de mesa. En caso de tenerlo, si es prestado, alquilado o propio. 
 Según lo que vemos en la gráfica podemos concluir que casi el 70% de los estudiantes no tienen un computador de mesa.
 
-
-# Portatil
-
+# Portatil {.tabset}
 
 ```{r}
 portatil <- table(encuesta_habitos$portatil)
-portatil
 portatil_porcentaje <- round(portatil/sum(portatil)*100,2)
 ```
 
+## Gráfica
 ```{r}
 #Trabajamos el lienzo
 par(mar = c(8, 5, 3, 3))# le damos margenes
@@ -285,7 +368,7 @@ plot(seq(0,5,length.out = 100), 1:100,
      )
 abline(h = seq(0,100,10), col = "gray", lty = 3)
 g1 <- barplot(portatil_porcentaje,
-        col = c("#d9ae94", "#f1dca7"),
+        col = c("#f94144", "#f3722c","#f8961e", "#f9c74f","#90be6d", "#43aa8b","#577590"),
         cex.names = 0.65,
         las=1,
         add = TRUE,
@@ -295,16 +378,24 @@ text(g1, c(18,8,16,78),
                             digits = 6, decimal.mark = ",", 
                             big.mark = "."), "%"))
 ```
+
+## Tabla de frecuencia
+```{r}
+portatil
+```
+
+#
+
 #### Análisis descriptivo:
 
 En este gráfico se observa la distribución porcental de los estudiantes respecto a si poseen o no computador portatil. En caso de tenerlo, si es prestado, alquilado o propio.
 Claramente se observa que aproximadamente el 73% de los estudiantes tienen un computador portatil propio.
 
-# Internet
+# Internet {.tabset}
 
+## Gráfica
 ```{r}
 internet <- table(encuesta_habitos$internet)
-internet
 internet_porcentaje <- round(internet/sum(internet)*100,2)
 ```
 
@@ -321,8 +412,8 @@ plot(seq(0,7,length.out = 100), 1:100,
      )
 abline(h = seq(0,100,10), col = "gray", lty = 3) # las lineas que señalan las gráficas.
 g1 <- barplot(internet_porcentaje,
-        col = c("#d9ae94", "#f1dca7"), #Colores de la gráfica
-        cex.names = 0.65,#tamaño del nombre
+        col = c("#f94144", "#f3722c","#f8961e", "#f9c74f","#90be6d", "#43aa8b","#577590"), #Colores de la gráfica
+        names.arg = "",
         las=1, #Posición de los nombres
         add = TRUE, # se agrega para poder poner encima de un plot.
 )
@@ -331,23 +422,39 @@ text(g1, c(10,8,10,10,38,60), #Aquí pueden modificar las alturas.
      labels = paste(formatC(internet_porcentaje,
                             digits = 6, decimal.mark = ",", 
                             big.mark = "."), "%"))
+
+text(g1 + 0.2,
+    par("usr") [3], 0.4,
+    labels = names(internet),
+    srt = 45,
+    pos = 2,
+    cex = 0.65,
+    xpd = TRUE)
+
 ```
+
+## Tabla de frecuencia:
+```{r}
+internet
+```
+
+#
+
 #### Análisis descriptivo: (pendiente)
 
-# Smartphone
+# Smartphone {.tabset}
 
 
 ```{r}
 smartphone <- table(encuesta_habitos$smartphone)
-smartphone
 smartphone_porcentaje <- round(smartphone/sum(smartphone)*100,2)
 ```
 
-
+## Gráfica
 
 ```{r}
 #Trabajamos el lienzo
-par(mar = c(5, 5, 3, 3))# le damos margenes
+par(mar = c(5, 5, 1.5, 3))# le damos margenes
 plot(seq(0,5,length.out = 100), 1:100,
      type = "n",
      main = "Smartphone", 
@@ -358,7 +465,7 @@ plot(seq(0,5,length.out = 100), 1:100,
      )
 abline(h = seq(0,100,10), col = "gray", lty = 3) # las lineas que señalan las gráficas.
 g1 <- barplot(smartphone_porcentaje,
-        col = c("#d9ae94", "#f1dca7"), #Colores de la gráfica
+        col = c("#f94144", "#f3722c","#f8961e", "#f9c74f","#90be6d", "#43aa8b","#577590"), #Colores de la gráfica
         cex.names = 0.65,#tamaño del nombre
         las=1, #Posición de los nombres
         add = TRUE, # se agrega para poder poner encima de un plot.
@@ -369,6 +476,13 @@ text(g1, c(6,6,10,102), #Aquí pueden modificar las alturas.
                             digits = 6, decimal.mark = ",", 
                             big.mark = "."), "%"))
 ```
+
+## Tabla de frecuencia
+```{r}
+smartphone
+```
+
+#
 
 # Origen  del Covid-19 {.tabset}
 
@@ -382,11 +496,14 @@ a<-gsub('\\<No.*do[[:punct:]]','Gobiernos',a)
 a<-gsub('\n',', ',a)
 aporc<-round(table(a)/sum(table(a))*100,1)
 q<-as.data.frame(sort(table(a),decreasing = TRUE))
-
 palets<- brewer.pal(8,"Set2")
-pie(sort(aporc,decreasing = TRUE),main='Causas del Covid-19',col=palets, border = 'white',lty=1,radius = 1,labels = '')
-legend(1,0,legend = paste(as.character(sort(aporc,decreasing = TRUE)),'%'),pch=15,col=palets,cex = .7)
-legend(-2,1,legend = q$a ,pch=15,col=palets,cex = .7)
+
+pie(sort(aporc,decreasing = TRUE), 
+main='Causas del Covid-19', col=palets, border = 'white', lty=1,radius = 1,labels = '')
+legend(1,0,legend = paste(as.character(sort(aporc,decreasing = TRUE)),'%'), pch=15, col=palets, cex = .7)
+legend(-2,1,legend = q$a , pch=15, col=palets, cex = .7)
+
+
 kable(round(sort(table(a),decreasing = TRUE)/sum(table(a))*100,1),col.names = c('Causa','porcentaje'))
 
 ```
@@ -395,8 +512,18 @@ kable(round(sort(table(a),decreasing = TRUE)/sum(table(a))*100,1),col.names = c(
 ## Grafica
 ```{r}
 q<-as.data.frame(table(a))
-ggplot(q,aes(x=q$Freq,y=q$a)) + geom_bar(stat = "identity", col='darkslategray3',fill='darkslategray3',alpha=.7)+scale_x_continuous(breaks = seq(0,80,5)) + ylab('Causa')+xlab('Número de personas')+ ggtitle('Causas del Covid-19')+theme(
-  panel.grid.minor.y = element_blank(),panel.grid.minor.x = element_blank(), axis.ticks.y = element_blank(), axis.title.x = element_text(size=15, vjust = -.5), axis.title.y = element_text(size = 15,vjust = 3),axis.text = element_text(family = "Helvetica", face = "bold", size = (10)),plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)
+
+ggplot(q,aes(x=q$Freq,y=q$a)) + 
+geom_bar(stat = "identity", col='darkslategray3',fill='darkslategray3',alpha=.7) +
+scale_x_continuous(breaks = seq(0,80,5)) + ylab('Causa') + xlab('Número de personas') +
+ggtitle('Causas del Covid-19') +
+theme(panel.grid.minor.y = element_blank(),
+panel.grid.minor.x = element_blank(), 
+axis.ticks.y = element_blank(), 
+axis.title.x = element_text(size=15, vjust = -.5), 
+axis.title.y = element_text(size = 15,vjust = 3), 
+axis.text = element_text(family = "Helvetica", face = "bold", size = (10)), 
+plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)
 )
 ```
 
@@ -409,18 +536,17 @@ ggplot(q,aes(x=q$Freq,y=q$a)) + geom_bar(stat = "identity", col='darkslategray3'
 
 Del gráfico se muestra la distribución porcentual de los estudiantes respecto a si poseen o no un smartphone. En caso de tenerlo, si es prestado, alquilado o propio. Se observa claramente que un aproximado del 97% de los estudiantes tienen un smartphone propio. 
 
-# Estadisticas gov
+# Estadisticas gov {.tabset}
 
 ```{r}
 gobierno <- table(encuesta_habitos$estad_gov)
-gobierno
 ```
 
 ```{r}
 gobierno_porcentaje <- round(gobierno/sum(gobierno)*100,2)
-gobierno_porcentaje
 ```
 
+## Gráfica
 ```{r}
 #Trabajamos el lienzo
 par(mar = c(5, 5, 3, 3))# le damos margenes
@@ -434,7 +560,7 @@ plot(seq(0,5,length.out = 100), 1:100,
      )
 abline(h = seq(0,100,10), col = "gray", lty = 3) # las lineas que señalan las gráficas.
 g1 <- barplot(gobierno_porcentaje,
-        col = c("#d9ae94", "#f1dca7"), #Colores de la gráfica
+        col = c("#f94144", "#f3722c"), #Colores de la gráfica
         cex.names = 0.65,#tamaño del nombre
         las=1, #Posición de los nombres
         add = TRUE, # se agrega para poder poner encima de un plot.
@@ -445,28 +571,40 @@ text(g1, c(78,30), #Aquí pueden modificar las alturas.
                             digits = 6, decimal.mark = ",", 
                             big.mark = "."), "%"))
 ```
+
+## Tabla de frecuencia
+```{r}
+gobierno
+```
+
+## Tabla porcentual
+```{r}
+gobierno_porcentaje
+```
+
+#
+
 #### Análisis descriptivo:
 
 Como se puede evidenciar en la gráfica, aproximadamente el 75% de los estudiantes se muestran escépticos frente a los datos y las estadísticas que emite el gobierno nacional durante el desarrollo de la pandemia en Colombia.
 
 # Habitos de estudio(PENDIENTE):
 
-# Número aleatorio.
+# Número aleatorio {.tabset}
 
 ```{r}
 aleatorio <- table(encuesta_habitos$aleatorio)
-aleatorio
 ```
 
 ```{r}
 aleatorio_porcentaje <- round(aleatorio/sum(aleatorio)*100,2)
-aleatorio_porcentaje
 ```
 
+## Gráfica
 ```{r}
 #Trabajamos el lienzo
-par(mar = c(5, 5, 3, 3))# le damos margenes
-plot(seq(0,13,length.out = 100), 1:100,
+par(mar = c(5, 5, 1, 0))# le damos margenes
+plot(seq(0,13,length.out = 40), 1:40,
      type = "n",
      main = "Número aleatorio", 
      cex.main = 0.75,
@@ -474,19 +612,32 @@ plot(seq(0,13,length.out = 100), 1:100,
      xlab = "",
      ylab = "Porcentajes"
      )
-abline(h = seq(0,100,10), col = "gray", lty = 3) # las lineas que señalan las gráficas.
+abline(h = seq(0,40,10), col = "gray", lty = 3) # las lineas que señalan las gráficas.
 g1 <- barplot(aleatorio_porcentaje,
-        col = c("#d9ae94", "#f1dca7"), #Colores de la gráfica
+        col = c("#f94144", "#f3722c","#f8961e", "#f9c74f","#90be6d", "#43aa8b","#577590"), #Colores de la gráfica
         cex.names = 0.60,#tamaño del nombre
         las=1, #Posición de los nombres
         add = TRUE, # se agrega para poder poner encima de un plot.
 )
 # Con las siguientes líneas se trabajan los porcentajes encima de la barra.
-text(g1, c(8,10,12,10,4,14,16,10,30,18), #Aquí pueden modificar las alturas.
+text(g1, c(8,10,10,12,14,9,28,17,12,10), #Aquí pueden modificar las alturas.
      labels = paste(formatC(aleatorio_porcentaje,
                             digits = 6, decimal.mark = ",", 
                             big.mark = "."), "%"))
 ```
+
+## Tabla de frecuencia 
+```{r}
+aleatorio
+```
+
+## Tabla porcentual
+```{r}
+aleatorio_porcentaje
+```
+
+#
+
 #### Análisis descriptivo: (pendiente).
 
 

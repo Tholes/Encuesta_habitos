@@ -502,9 +502,18 @@ total <- data.frame(papaxgenero)
 ggplot(total, aes(fill=Var1, x=Var2, y=Freq))+geom_bar(position="dodge",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Genero", title="PAPA discriminado por género")+geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)
 ```
 
-# PAPA-Fecha de nacimiento
+# PAPA-Edad
 
-PENDIENTE
+```{r}
+#Mejorar las margenes
+papaedad <- sqldf('SELECT fecha_dep,PAPA FROM encuesta_habitos WHERE PAPA IS NOT NULL')
+papaedad$fecha_dep <- as.Date(papaedad$fecha_dep,"%d/%m/%Y")
+papaedad$fecha_dep <- round(as.numeric(Sys.Date() - papaedad$fecha_dep )/ 365,0)
+papaedad <- sqldf('SELECT * FROM papaedad WHERE fecha_dep>1')
+tablaedadpapa <- sqldf('SELECT fecha_dep, PAPA, COUNT(*) as Cuantos FROM papaedad GROUP BY fecha_dep, PAPA')
+tablaedadpapa$fecha_dep <- as.factor(tablaedadpapa$fecha_dep)
+ggplot(tablaedadpapa, aes(fill=fecha_dep, x=PAPA, y=Cuantos))+geom_bar(position="stack",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Edad", title="PAPA discriminado por Edad")
+```
 
 # PAPA-Carrera
 
@@ -541,5 +550,55 @@ graf <- data.frame(papaxpc)
 ggplot(graf, aes(fill=Var2, x=Var1,  y=Freq))+geom_bar(position="stack",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Computador", title="PAPA discriminado por Computador")+geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)
 ```
 
+# PAPA-Portatil
 
+```{r}
+papaxpr <- table(encuesta_habitos$PAPA, encuesta_habitos$portatil)
+graf2 <- data.frame(papaxpr)
+ggplot(graf2, aes(fill=Var2, x=Var1,  y=Freq))+geom_bar(position="stack",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Portatil", title="PAPA discriminado por Portatil")+geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)
+```
 
+# PAPA-Internet
+
+```{r}
+papaxin <- table(encuesta_habitos$PAPA, encuesta_habitos$internet)
+graf3 <- data.frame(papaxin)
+ggplot(graf3, aes(fill=Var2, x=Var1,  y=Freq))+geom_bar(position="stack",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Internet", title="PAPA discriminado por Internet")+geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)
+```
+
+# PAPA-Smartphone
+
+```{r}
+papaxsp <- table(encuesta_habitos$PAPA, encuesta_habitos$smartphone)
+graf4 <- data.frame(papaxsp)
+ggplot(graf4, aes(fill=Var2, x=Var1,  y=Freq))+geom_bar(position="stack",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Smartphone", title="PAPA discriminado por Smartphone")+geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)
+```
+
+# PAPA-Origen del COVID-19
+
+```{r}
+#Margenes
+papaxcovid <- table(encuesta_habitos$PAPA, encuesta_habitos$origen_covid_19)
+graf5 <- data.frame(papaxcovid)
+ggplot(graf5, aes(fill=Var2, x=Var1,  y=Freq))+geom_bar(position="stack",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Origen COVID-19", title="PAPA discriminado por Origen COVID-19")+geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)+ scale_fill_brewer(palette = "Set3")
+```
+
+# PAPA-Estadisticas del gobierno
+
+```{r}
+papaxstats <- table(encuesta_habitos$PAPA, encuesta_habitos$estad_gov)
+graf6 <- data.frame(papaxstats)
+ggplot(graf6, aes(fill=Var2, x=Var1,  y=Freq))+geom_bar(position="stack",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Estadisticas del gobierno", title="PAPA discriminado por Estadisticas del gobierno")+geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)+ scale_fill_brewer(palette = "Set3")
+```
+
+# PAPA-Hábitos
+
+PENDIENTE
+
+# PAPA-Aleatorio
+
+```{r}
+papaxal <- table(encuesta_habitos$PAPA, encuesta_habitos$aleatorio)
+graf7 <- data.frame(papaxal)
+ggplot(graf7, aes(fill=Var2, x=Var1,  y=Freq))+geom_bar(position="stack",stat="identity")+labs(x="PAPA",y="Número de personas",fill = "Número", title="PAPA discriminado por número aleatorio")+geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)+ scale_fill_brewer(palette = "Spectral")
+```

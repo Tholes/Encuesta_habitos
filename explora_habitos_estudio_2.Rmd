@@ -527,6 +527,8 @@ legend(-2,1,legend = q$a , pch=15, col=palets, cex = .7)
 
 
 ```
+
+
 ### Tabla de frecuencia
 ```{r}
 kable(round(sort(table(a),decreasing = TRUE)/sum(table(a))*100,1),col.names = c('Causa','porcentaje'))

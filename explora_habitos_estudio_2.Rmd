@@ -17,6 +17,7 @@ knitr::opts_chunk$set(echo = FALSE,
 library(knitr)
 library(ggplot2)
 library(RColorBrewer)
+library(tidyverse)
 library(fmsb) #Librería para la araña
 library(sqldf) #Librería sql
 
@@ -62,12 +63,11 @@ text(g1, c(30,78),
 
 ## Tabla de frecuencia
 ```{r}
-genero
+kable(genero, col.names = c('Género','Frecuencia'))
 ```
 
-#
 
-#### Análisis descriptivo:
+## Análisis descriptivo:
 
 Del gráfico se observa la distribución porcentual de los estudiantes por genero. Se observa que la cantidad de personas que pertenecen al genero masculino es evidentemente mayor a la cantidad de personas del genero fememino, esto es con una diferencia del 46.96% entre ambos generos. 
 
@@ -199,7 +199,7 @@ summary(edad)
 
 #
 
-#### Analisis pendiente...
+## Analisis pendiente...
 
 # Carrera {.tabset}
 
@@ -243,12 +243,12 @@ text(g2 + 0.2,
 
 ## Tabla de frecuencia
 ```{r}
-carrera
+kable(sort(carrera,decreasing = TRUE),col.names = c('Carrera','Frecuencia'),align = 'lc')
 ```
 
 #
 
-#### Análisis descriptivo:
+## Análisis descriptivo:
 
 En este gráfico se observa la distribución porcental de los estudiantes por carrera. Se puede notar que apróximadamente el 90% de los estudiantes pertenecen a las carreras de Estadística e ingeniería de sistemas e informática y con menos frecuencia se encuentran las carreras de ingeniería biológica e ingeniería de control.
 
@@ -314,11 +314,11 @@ text(g1, c(8,20,40,50,12,8),
 
 ## Tabla de frecuencia
 ```{r}
-estrato
+kable(estrato,col.names = c('Estrato','Frecuencia'),align = 'cc')
 ```
 #
 
-#### Análisis descriptivo:
+## Análisis descriptivo:
 
 Del gráfico se observa la distribución porcentual de los estudiantes por estrato. Se puede evidencia que aproximadamente el 78% de los estudiantes pertenecen a los estratos 2 y 3.
 
@@ -358,12 +358,12 @@ text(g1, c(75,8,8,35),
 
 ## Tabla de frecuencia
 ```{r}
-computador_mesa
+kable(computador_mesa,col.names = c('Respuesta','Frecuencia'),align = 'lc')
 ```
 
 #
 
-#### Análisis descriptivo:
+## Análisis descriptivo:
 
 De este gráfico claramente se observa la distribución porcentual de los estudiantes respecto a si poseen o no computador de mesa. En caso de tenerlo, si es prestado, alquilado o propio. 
 Según lo que vemos en la gráfica podemos concluir que casi el 70% de los estudiantes no tienen un computador de mesa.
@@ -402,12 +402,12 @@ text(g1, c(18,8,16,78),
 
 ## Tabla de frecuencia
 ```{r}
-portatil
+kable(portatil, col.names = c('Respuesta','Frecuencia'),align = 'lc')
 ```
 
 #
 
-#### Análisis descriptivo:
+## Análisis descriptivo:
 
 En este gráfico se observa la distribución porcental de los estudiantes respecto a si poseen o no computador portatil. En caso de tenerlo, si es prestado, alquilado o propio.
 Claramente se observa que aproximadamente el 73% de los estudiantes tienen un computador portatil propio.
@@ -456,12 +456,12 @@ text(g1 + 0.2,
 
 ## Tabla de frecuencia:
 ```{r}
-internet
+kable(internet,col.names = c('Respuesta','Frecuencia'),align = 'lc')
 ```
 
 #
 
-#### Análisis descriptivo: (pendiente)
+## Análisis descriptivo: (pendiente)
 
 # Smartphone {.tabset}
 
@@ -500,7 +500,7 @@ text(g1, c(6,6,10,102), #Aquí pueden modificar las alturas.
 
 ## Tabla de frecuencia
 ```{r}
-smartphone
+kable(smartphone,col.names = c('Respuesta','Frecuencia'),align = 'lc')
 ```
 
 #
@@ -525,9 +525,14 @@ legend(1,0,legend = paste(as.character(sort(aporc,decreasing = TRUE)),'%'), pch=
 legend(-2,1,legend = q$a , pch=15, col=palets, cex = .7)
 
 
+
+```
+### Tabla de frecuencia
+```{r}
 kable(round(sort(table(a),decreasing = TRUE)/sum(table(a))*100,1),col.names = c('Causa','porcentaje'))
 
 ```
+
 
 
 ## Grafica
@@ -553,11 +558,11 @@ plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust
 
 
 
-#### Análisis descriptivo:
+## Análisis descriptivo:
 
 Del gráfico se muestra la distribución porcentual de los estudiantes respecto a si poseen o no un smartphone. En caso de tenerlo, si es prestado, alquilado o propio. Se observa claramente que un aproximado del 97% de los estudiantes tienen un smartphone propio. 
 
-# Estadisticas gov {.tabset}
+# Estadisticas del gobierno {.tabset}
 
 ```{r}
 gobierno <- table(encuesta_habitos$estad_gov)
@@ -595,23 +600,69 @@ text(g1, c(78,30), #Aquí pueden modificar las alturas.
 
 ## Tabla de frecuencia
 ```{r}
-gobierno
+kable(gobierno,col.names = c('Respuesta','Frecuencia'),align = 'cc')
 ```
 
 ## Tabla porcentual
 ```{r}
-gobierno_porcentaje
+kable(gobierno_porcentaje,col.names = c('Respuesta','Porcentaje'),align = 'cc')
 ```
 
 #
 
-#### Análisis descriptivo:
+## Análisis descriptivo:
 
 Como se puede evidenciar en la gráfica, aproximadamente el 75% de los estudiantes se muestran escépticos frente a los datos y las estadísticas que emite el gobierno nacional durante el desarrollo de la pandemia en Colombia.
 
-# Habitos de estudio:
-```{r}
+# Hábitos de estudio{.tabset}
 
+## Grafica
+```{r}
+hab<-c(encuesta_habitos$habito_1,encuesta_habitos$habito_2,encuesta_habitos$habito_3,encuesta_habitos$habito_4,encuesta_habitos$habito_5,encuesta_habitos$habito_6,encuesta_habitos$habito_7,encuesta_habitos$habito_8,encuesta_habitos$habito_9,encuesta_habitos$habito_10,encuesta_habitos$habito_11,encuesta_habitos$habito_12,encuesta_habitos$habito_13,encuesta_habitos$habito_14,encuesta_habitos$habito_15,encuesta_habitos$habito_16,encuesta_habitos$habito_17)
+
+b<- gsub('^Algunas.*gos.$',' Estudia con amigos y solo', hab)
+b<-gsub('^Escucha\\D*estudia.$','Estudia con música', b)
+b<-gsub('^Estudia.*compañeros.$','Estudia solo soluciones',b)
+b<-gsub('^Estudia.*anterior.*examen.$','Estudia solo el día anterior',b)
+b<-gsub('^Estudia.*misma.*estudio.$','Ve temas distintos en una sesión',b)
+b<-gsub('^Hace.*horario.$','Horario estricto',b)
+b<-gsub('^Lee.*texto.$','Lee varias veces un capitulo',b)
+b<-gsub('^Los.*estudio.$','Ejercicios con amigos',b)
+b<-gsub('^Prefiere.*ejercicios.$','Vistazo a muchos ejercicios resueltos',b)
+b<-gsub('^Prefiere.*resueltos.$','Pocos ejercicios bien entendidos',b)
+b<-gsub('^Resuelve.*anticipadamente.$','Hace ejercicios sin ver las respuestas',b)
+b<-gsub('.*lugar.*fijo.*','Estudia en lugar fijo',b)
+b<-gsub('^Solo.*resolver.$','Pregunta a amigos por ejercicios que no pudo',b)
+b<-gsub('^Toma.*continuo.$','Hace pausas activas',b)
+b<-gsub('^Tomas.*clase.$','Transcribe ejercicios de clase',b)
+b<-gsub('^Usa.*resueltos.$','Ve ejercicios hechos en solucionarios',b)
+h<- as.data.frame(table(b))
+ggplot(h,aes(x=h$Freq,y=h$b)) + 
+geom_bar(stat = "identity", col='palevioletred1',fill='palevioletred1',alpha=.7) +
+ylab('Hábito') + xlab('Número de personas') +
+scale_x_continuous(breaks = seq(0,100,10))+
+ggtitle('Hábitos de estudio') +
+theme(panel.grid.minor.y = element_blank(),
+panel.grid.minor.x = element_blank(), 
+axis.ticks.y = element_blank(), 
+axis.title.x = element_text(size=15, vjust = -.5), 
+axis.title.y = element_text(size = 15,vjust = 3), 
+axis.text = element_text(family = "Helvetica", face = "bold", size = (10)), 
+plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)
+)
+
+
+
+```
+
+
+
+
+
+
+## Tabla de frecuencia
+```{r}
+kable(table(b),col.names = c('Hábito','Frecuencia'),align = 'lc')
 ```
 
 
@@ -653,17 +704,17 @@ text(g1, c(8,10,10,12,14,9,28,17,12,10), #Aquí pueden modificar las alturas.
 
 ## Tabla de frecuencia 
 ```{r}
-aleatorio
+kable(aleatorio,col.names = c('Numero','Frecuencia'),align = 'cc')
 ```
 
 ## Tabla porcentual
 ```{r}
-aleatorio_porcentaje
+kable(aleatorio_porcentaje,col.names = c('Numero','Porcentaje'),align = 'cc')
 ```
 
 #
 
-#### Análisis descriptivo: (pendiente).
+## Análisis descriptivo: (pendiente).
 
 
 # PAPA-Género
@@ -821,9 +872,51 @@ ggplot(graf6, aes(fill=Var2, x=Var1,  y=Freq))+
   scale_fill_brewer(palette = "Set3")#Colores
 ```
 
-# PAPA-Hábitos
+# PAPA-Hábitos{.tabset}
+## Grafica
+```{r, fig.height=8, fig.width=10}
+dfhabitos <-  pivot_longer(encuesta_habitos, habito_1:habito_17,
+               names_to = "num_habito",
+               values_to = "habito",
+               values_drop_na = TRUE)
 
-PENDIENTE
+
+d<-gsub('^Algunas.*gos.$',' Estudia con amigos y solo', dfhabitos$habito)
+d<-gsub('^Escucha\\D*estudia.$','Estudia con música',d)
+d<-gsub('^Estudia.*compañeros.$','Estudia solo soluciones',d)
+d<-gsub('^Estudia.*anterior.*examen.$','Estudia solo el día anterior',d )
+d<-gsub('^Estudia.*misma.*estudio.$','Ve temas distintos en una sesión',d )
+d<-gsub('^Hace.*horario.$','Horario estricto',d )
+d<-gsub('^Lee.*texto.$','Lee varias veces un capitulo',d )
+d<-gsub('^Los.*estudio.$','Ejercicios con amigos',d )
+d<-gsub('^Prefiere.*ejercicios.$','Vistazo a muchos ejercicios resueltos',d )
+d<-gsub('^Prefiere.*resueltos.$','Pocos ejercicios bien entendidos',d )
+d<-gsub('^Resuelve.*anticipadamente.$','Hace ejercicios sin ver las respuestas',d )
+d<-gsub('.*lugar.*fijo.*','Estudia en lugar fijo',d )
+d<-gsub('^Solo.*resolver.$','Pregunta a amigos por ejercicios que no pudo',d )
+d<-gsub('^Toma.*continuo.$','Hace pausas activas',d )
+d<-gsub('^Tomas.*clase.$','Transcribe ejercicios de clase',d )
+d<-gsub('^Usa.*resueltos.$','Ve ejercicios hechos en solucionarios',d )
+dfhabitos$habito<-d
+
+par(mar=c(5.1, 18, 4.1, 2.1))
+boxplot(PAPA ~ habito, data = dfhabitos, las = 1,
+        xlab = "Promedio Académico Ponderado Acumulado", ylab = "", 
+        varwidth = TRUE,
+        horizontal = TRUE,
+        notch = TRUE,
+        cex.text = 0.7,
+        col = "wheat2"
+        )
+abline(v=c(3,3.5,4,4.5), col='grey80', lty='dotted')
+
+```
+
+
+## Analisis (pendiente)
+
+
+
 
 # PAPA-Aleatorio
 

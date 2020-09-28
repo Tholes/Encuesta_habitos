@@ -17,6 +17,7 @@ knitr::opts_chunk$set(echo = FALSE,
 library(knitr)
 library(ggplot2)
 library(RColorBrewer)
+library(tidyverse)
 library(fmsb) #Librería para la araña
 library(sqldf) #Librería sql
 
@@ -25,6 +26,11 @@ encuesta_habitos <- read.csv2("Encuesta_habitos.csv",
                        encoding = "UTF-8",
                        dec = ".")
 ```
+# Cambios de la base de datos
+
+Los cambios realizados en la base de datos se hicieron para un mejor análisis y una mejor manipulación de esta, se le añadieron dos nuevas columnas correspondientes a la depuración de la variable Carrera y la depuración de la variable Fecha de Nacimiento. De forma indirecta, en la variable de Hábitos de estudio se usaron expresiones regulares guardadas en variables de R
+
+
 
 # Genero {.tabset}
 
@@ -62,14 +68,14 @@ text(g1, c(30,78),
 
 ## Tabla de frecuencia
 ```{r}
-genero
+kable(genero, col.names = c('Género','Frecuencia'))
 ```
 
-#
 
-#### Análisis descriptivo:
+## Análisis descriptivo:
 
 Del gráfico se observa la distribución porcentual de los estudiantes por genero. Se observa que la cantidad de personas que pertenecen al genero masculino es evidentemente mayor a la cantidad de personas del genero fememino, esto es con una diferencia del 46.96% entre ambos generos. 
+
 
 # Fecha de nacimiento {.tabset}
 
@@ -97,7 +103,7 @@ ggplot(encuesta_habitos, aes(x=seq(0,100,length.out = 132),y=as.numeric(format(f
     xlab("") + ylab('Año') + ggtitle('Violín de la variable Años') + 
     theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)) +
     coord_cartesian(ylim = c(1956,2020)) + scale_y_continuous(breaks = seq(1950,2020,5)) + 
-    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.y = element_text(size = 15, vjust = 1.3),
+    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.y = element_text(size = 15, vjust =       1.3),
     axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
 ```
 
@@ -113,31 +119,58 @@ summary(as.numeric(format(fechas,"%Y")))
 e
 ```
 
-## Grafica Dias
+## Grafica Mes-Dias
 ```{r}
-dtable<- format(fechas,'%d')
-dias<- as.vector(table(dtable))
-dias<-append(dias,0,after = 2)
-df<- data.frame('dias'= dias)
-dtable1<-sort(unique(c(dtable,'03')))
+mes<-as.vector(table(format(fechas,'%m')))
+dff<-data.frame('mes'=mes)
+dtable2<-sort(unique(format(fechas,'%m')))
 
-ggplot(df,aes(x=dtable1,y=dias)) + 
-geom_segment(aes(x=dtable1,xend=dtable1,y=0,yend=dias), color='grey70',lwd=1) + 
+
+ggplot(dff,aes(x=dtable2,y=mes)) + 
+geom_segment(aes(x=dtable2,xend=dtable2,y=0,yend=mes), color='grey70',lwd=1) + 
 theme_light() +
-scale_y_continuous(breaks = seq(0,15,1)) + ggtitle('Lollipop de la variable Días' ) +
+  scale_x_discrete(labels= c('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre')) +
+scale_y_continuous(breaks = seq(0,16,1)) + 
+ggtitle('Lollipop de la variable Mes' ) +
 theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5), 
-axis.title.x = element_text( size = (15)),
+axis.title.x = element_text( size = (15),vjust = 7),
+axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)), 
+axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10), angle = 45), 
+axis.title.y = element_text(size = 15), 
+panel.grid.major.x = element_blank(), 
+panel.border = element_blank(), 
+axis.ticks.x = element_blank()) + 
+ylab('Número de personas')+ xlab('Mes' ) +
+geom_point(color="brown", size=3)
+
+
+dff<- data.frame('mes'=as.vector(format(fechas,'%m')),
+                 'dia'=as.vector(format(fechas,'%d')))
+dias_sep<-subset(dff,mes=='09')
+
+ggplot(as.data.frame(sort(unique(dias_sep$dia))), aes(x=sort(unique(dias_sep$dia)), y=as.vector(table(dias_sep$dia)))) + 
+geom_segment(aes(x=sort(unique(dias_sep$dia)),xend=sort(unique(dias_sep$dia)),y=0,yend=as.vector(table(dias_sep$dia))), color='grey70',lwd=1) + 
+theme_light()+
+scale_y_continuous(breaks = seq(0,16,1)) + ggtitle('Lollipop del mes de Septiembre' ) +
+theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5), 
+axis.title.x = element_text( size = (15),vjust = -1),
 axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)), 
 axis.text.x = element_text(family = "Helvetica", face = "bold", size = (10)), 
 axis.title.y = element_text(size = 15), 
 panel.grid.major.x = element_blank(), 
 panel.border = element_blank(), 
 axis.ticks.x = element_blank()) + 
-ylab('Número de personas')+ xlab('Día de cumpleaños' ) +
-geom_point(color="brown", size=3)
+ylab('Número de personas')+ xlab('Día de Septiembre' ) +
+geom_point(color="orange", size=3)
 ```
 
-#
+## Análisis Descriptivo
+
+Del gráfico se observa la distribución de los estudiantes por año de nacimiento en un boxplot. De ahí se pueden sacar datos como los son sus datos atípicos, rango intercuartil, mediana, su mínimo y máximo. Se puede ver notoriamente dos datos mucho más atípicos que los otros,  los cuáles son, 1) el del 2020, que es evidente, porque nos estaban preguntando por nuestra fecha de nacimiento y una persona que apenas nació no podría estudiar y 2) el del 1955, porque es un dato extraño o muy exótico, comparado con los otros datos que se muestra. También nos muestra la mediana, que corresponde al año 2000 y su rango intercuartil es 3, ya que al restar el primer cuartil (1998), con el tercer cuartil (2001) obtenemos este número. Su año mínimo es 1956 y su año máximo 2020.
+
+GRÁFICA MES-DÍAS: según nuestra gráfica distribuida por los meses del año, y cuánta frecuencia hay en cada uno, se observa considerablemente en el mes de septiembre hay 16 estudiantes, siendo esta la mayor frecuencia  y en los meses de febrero y abril con 4 estudiantes, siendo estos la menor frecuencia. 
+
+MES DE SEPTIEMBRE: tomamos este mes que fue el que tuvo  una mayor frecuencia, y los representamos con sus días, el día, que tuvo una mayor frecuencia fue el 07, con 3 estudiantes. 
 
 # Edad {.tabset}
 
@@ -170,15 +203,18 @@ ggplot(as.data.frame(edad), aes(x=seq(0,100,length.out = 125),y=edad)) +
     axis.text.y = element_text(family = "Helvetica", face = "bold", size = (10)))
 ```
 
+
+
 ## Resumen numérico
 ```{r}
 summary(edad)
  
 ```
 
-#
+## Análisis descriptivo
 
-#### Analisis pendiente...
+De este gráfico se puede ver la distribución de los estudiantes por edad, en un boxplot. De este boxplot se puede sacar datos  como los son sus atípicos, mediana, rango intercuartil, su mínimo y máximo. Se puede observar que su dato más atípico es 64 años. También que su mediana es 20 años y su rango intercuartil es 4, ya que al restar el primer cuartil (19), con el tercer cuartil (23) obtenemos este número. La edad mínima es 17 años y la edad máxima 64 años.
+
 
 # Carrera {.tabset}
 
@@ -222,12 +258,11 @@ text(g2 + 0.2,
 
 ## Tabla de frecuencia
 ```{r}
-carrera
+kable(sort(carrera,decreasing = TRUE),col.names = c('Carrera','Frecuencia'),align = 'lc')
 ```
 
-#
 
-#### Análisis descriptivo:
+## Análisis descriptivo:
 
 En este gráfico se observa la distribución porcental de los estudiantes por carrera. Se puede notar que apróximadamente el 90% de los estudiantes pertenecen a las carreras de Estadística e ingeniería de sistemas e informática y con menos frecuencia se encuentran las carreras de ingeniería biológica e ingeniería de control.
 
@@ -254,10 +289,12 @@ axis.title.x = element_text(size = 15),axis.title.y = element_text(size = 15))
 
 ## Tabla de Frecuencia
 ```{r}
-kable(table(encuesta_habitos$PAPA), col.names = c('PAPA','Frecuencia'), align = 'cc')
+kable(table(round(encuesta_habitos$PAPA,1)), col.names = c('PAPA','Frecuencia'), align = 'cc')
 ```
 
-#
+## Análisis descriptivo:
+
+De la gráfica se puede observar claramente una mayor concentración de frecuencia en los valores del PAPA correspondientes al intervalo de 3.5 a 4, siendo el valor del PAPA igual a 3.8 el de mayor frecuencia.
 
 # Estrato {.tabset}
 
@@ -293,11 +330,11 @@ text(g1, c(8,20,40,50,12,8),
 
 ## Tabla de frecuencia
 ```{r}
-estrato
+kable(estrato,col.names = c('Estrato','Frecuencia'),align = 'cc')
 ```
-#
 
-#### Análisis descriptivo:
+
+## Análisis descriptivo:
 
 Del gráfico se observa la distribución porcentual de los estudiantes por estrato. Se puede evidencia que aproximadamente el 78% de los estudiantes pertenecen a los estratos 2 y 3.
 
@@ -337,12 +374,11 @@ text(g1, c(75,8,8,35),
 
 ## Tabla de frecuencia
 ```{r}
-computador_mesa
+kable(computador_mesa,col.names = c('Respuesta','Frecuencia'),align = 'lc')
 ```
 
-#
 
-#### Análisis descriptivo:
+## Análisis descriptivo:
 
 De este gráfico claramente se observa la distribución porcentual de los estudiantes respecto a si poseen o no computador de mesa. En caso de tenerlo, si es prestado, alquilado o propio. 
 Según lo que vemos en la gráfica podemos concluir que casi el 70% de los estudiantes no tienen un computador de mesa.
@@ -381,12 +417,11 @@ text(g1, c(18,8,16,78),
 
 ## Tabla de frecuencia
 ```{r}
-portatil
+kable(portatil, col.names = c('Respuesta','Frecuencia'),align = 'lc')
 ```
 
-#
 
-#### Análisis descriptivo:
+## Análisis descriptivo:
 
 En este gráfico se observa la distribución porcental de los estudiantes respecto a si poseen o no computador portatil. En caso de tenerlo, si es prestado, alquilado o propio.
 Claramente se observa que aproximadamente el 73% de los estudiantes tienen un computador portatil propio.
@@ -435,12 +470,14 @@ text(g1 + 0.2,
 
 ## Tabla de frecuencia:
 ```{r}
-internet
+kable(internet,col.names = c('Respuesta','Frecuencia'),align = 'lc')
 ```
 
-#
 
-#### Análisis descriptivo: (pendiente)
+## Análisis descriptivo:
+
+En la gráfica se observa la distribución porcentual de los estudiantes respecto a qué tipo de internet poseen, si es alquilado, de “contrabando”, prestado, propio, familiar o si es un plan de datos en el celular. Se puede ver de forma evidente que la mayoría de los estudiantes, con un aproximado del 55% poseen internet de clasificación familiar. 
+
 
 # Smartphone {.tabset}
 
@@ -479,14 +516,17 @@ text(g1, c(6,6,10,102), #Aquí pueden modificar las alturas.
 
 ## Tabla de frecuencia
 ```{r}
-smartphone
+kable(smartphone,col.names = c('Respuesta','Frecuencia'),align = 'lc')
 ```
 
-#
+## Análisis descriptivo:
+
+Del gráfico se muestra la distribución porcentual de los estudiantes respecto a si poseen o no un smartphone. En caso de tenerlo, si es prestado, alquilado o propio. Se observa claramente que un aproximado del 97% de los estudiantes tienen un smartphone propio. 
 
 # Origen  del Covid-19 {.tabset}
 
 ## Distribución porcentual
+
 ```{r}
 a<-encuesta_habitos$origen_covid_19
 a<-gsub('\\<Es.*n[[:punct:]]','Conspiracion',a)
@@ -504,12 +544,21 @@ legend(1,0,legend = paste(as.character(sort(aporc,decreasing = TRUE)),'%'), pch=
 legend(-2,1,legend = q$a , pch=15, col=palets, cex = .7)
 
 
+
+```
+
+
+### Tabla de frecuencia
+
+```{r}
 kable(round(sort(table(a),decreasing = TRUE)/sum(table(a))*100,1),col.names = c('Causa','porcentaje'))
 
 ```
 
 
+
 ## Grafica
+
 ```{r}
 q<-as.data.frame(table(a))
 
@@ -528,15 +577,12 @@ plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust
 ```
 
 
+## Análisis descriptivo:
+De las gráficas anteriores se pueden observar las diferentes opciones sobre la posible causa del covid-19. La opción con mayor porcentaje fue “Animales” con un aproximado de 56%, lo que quiere decir que alrededor de 65 estudiantes creen que el origen del covid-19 fue un resultado de pasar el virus de animales a los humanos. Así mismo, con un porcentaje muy significativo de maso menos el 28% se encuentra la opción de “laboratorio”, es decir que 33 personas creen que el covid-19 fue creado en un laboratorio y, alrededor el 11.2% considera que el origen del covid-19 se debió a varias opciones. 
 
 
 
-
-#### Análisis descriptivo:
-
-Del gráfico se muestra la distribución porcentual de los estudiantes respecto a si poseen o no un smartphone. En caso de tenerlo, si es prestado, alquilado o propio. Se observa claramente que un aproximado del 97% de los estudiantes tienen un smartphone propio. 
-
-# Estadisticas gov {.tabset}
+# Estadisticas del gobierno {.tabset}
 
 ```{r}
 gobierno <- table(encuesta_habitos$estad_gov)
@@ -574,21 +620,67 @@ text(g1, c(78,30), #Aquí pueden modificar las alturas.
 
 ## Tabla de frecuencia
 ```{r}
-gobierno
+kable(gobierno,col.names = c('Respuesta','Frecuencia'),align = 'cc')
 ```
 
 ## Tabla porcentual
 ```{r}
-gobierno_porcentaje
+kable(gobierno_porcentaje,col.names = c('Respuesta','Porcentaje'),align = 'cc')
 ```
 
-#
 
-#### Análisis descriptivo:
+## Análisis descriptivo:
 
 Como se puede evidenciar en la gráfica, aproximadamente el 75% de los estudiantes se muestran escépticos frente a los datos y las estadísticas que emite el gobierno nacional durante el desarrollo de la pandemia en Colombia.
 
-# Habitos de estudio(PENDIENTE):
+# Hábitos de estudio{.tabset}
+
+## Grafica
+```{r}
+hab<-c(encuesta_habitos$habito_1,encuesta_habitos$habito_2,encuesta_habitos$habito_3,encuesta_habitos$habito_4,encuesta_habitos$habito_5,encuesta_habitos$habito_6,encuesta_habitos$habito_7,encuesta_habitos$habito_8,encuesta_habitos$habito_9,encuesta_habitos$habito_10,encuesta_habitos$habito_11,encuesta_habitos$habito_12,encuesta_habitos$habito_13,encuesta_habitos$habito_14,encuesta_habitos$habito_15,encuesta_habitos$habito_16,encuesta_habitos$habito_17)
+
+b<- gsub('^Algunas.*gos.$',' Estudia con amigos y solo', hab)
+b<-gsub('^Escucha\\D*estudia.$','Estudia con música', b)
+b<-gsub('^Estudia.*compañeros.$','Estudia solo soluciones',b)
+b<-gsub('^Estudia.*anterior.*examen.$','Estudia solo el día anterior',b)
+b<-gsub('^Estudia.*misma.*estudio.$','Ve temas distintos en una sesión',b)
+b<-gsub('^Hace.*horario.$','Horario estricto',b)
+b<-gsub('^Lee.*texto.$','Lee varias veces un capitulo',b)
+b<-gsub('^Los.*estudio.$','Ejercicios con amigos',b)
+b<-gsub('^Prefiere.*ejercicios.$','Vistazo a muchos ejercicios resueltos',b)
+b<-gsub('^Prefiere.*resueltos.$','Pocos ejercicios bien entendidos',b)
+b<-gsub('^Resuelve.*anticipadamente.$','Hace ejercicios sin ver las respuestas',b)
+b<-gsub('.*lugar.*fijo.*','Estudia en lugar fijo',b)
+b<-gsub('^Solo.*resolver.$','Pregunta a amigos por ejercicios que no pudo',b)
+b<-gsub('^Toma.*continuo.$','Hace pausas activas',b)
+b<-gsub('^Tomas.*clase.$','Transcribe ejercicios de clase',b)
+b<-gsub('^Usa.*resueltos.$','Ve ejercicios hechos en solucionarios',b)
+h<- as.data.frame(table(b))
+ggplot(h,aes(x=h$Freq,y=h$b)) + 
+geom_bar(stat = "identity", col='palevioletred1',fill='palevioletred1',alpha=.7) +
+ylab('Hábito') + xlab('Número de personas') +
+scale_x_continuous(breaks = seq(0,100,10))+
+ggtitle('Hábitos de estudio') +
+theme(panel.grid.minor.y = element_blank(),
+panel.grid.minor.x = element_blank(), 
+axis.ticks.y = element_blank(), 
+axis.title.x = element_text(size=15, vjust = -.5), 
+axis.title.y = element_text(size = 15,vjust = 3), 
+axis.text = element_text(family = "Helvetica", face = "bold", size = (10)), 
+plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust = .5)
+)
+```
+
+
+## Tabla de frecuencia
+```{r}
+kable(table(b),col.names = c('Hábito','Frecuencia'),align = 'lc')
+```
+
+## Análisis descriptivo:
+
+Del gráfico se observa la frecuencia de los estudiantes por hábitos de estudio. Se observa que los hábitos de estudio más usados por los estudiantes son los correspondientes a hacer pausas activas, hacer ejercicios sin ver las respuestas y transcribir ejercicios de clase. Por el lado contrario, el hábito de estudio con menos frecuencia es estudiar solo las soluciones, está cuenta con una frecuencia de 3. 
+
 
 # Número aleatorio {.tabset}
 
@@ -628,23 +720,23 @@ text(g1, c(8,10,10,12,14,9,28,17,12,10), #Aquí pueden modificar las alturas.
 
 ## Tabla de frecuencia 
 ```{r}
-aleatorio
+kable(aleatorio,col.names = c('Numero','Frecuencia'),align = 'cc')
 ```
 
 ## Tabla porcentual
 ```{r}
-aleatorio_porcentaje
+kable(aleatorio_porcentaje,col.names = c('Numero','Porcentaje'),align = 'cc')
 ```
 
-#
+## Análisis descriptivo:
 
-#### Análisis descriptivo: (pendiente).
+Como se puede evidenciar en la gráfica, aproximadamente el 40% de los estudiantes, escogieron el número 7 u 8, como su número aleatorio, con una mayor frecuencia en el número 7
 
 
-# PAPA-Género
+# PAPA-Género {.tabset}
 
+## Gráfica
 ```{r}
-
 #Tabla de frecuencias del papa por genero
 papaxgenero <- table(encuesta_habitos$genero, encuesta_habitos$PAPA)
 #Data frame para poder ingresar a la gráfica
@@ -656,8 +748,15 @@ ggplot(total, aes(fill=Var1, x=Var2, y=Freq))+
   geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)#Lineas punteadas en cada unidad
 ```
 
-# PAPA-Edad
 
+## Análisis descriptivo:
+
+En el gráfico se puede observar las diferentes notas del PAPA discriminado por Género. Se observa que la mayor cantidad de personas del género masculino se concentra en las Notas del PAPA en el intervalo de 3.5 a 3.8. El género femenino por su parte se observa bastante disperso, incluso en algunas notas del PAPA no hay personas del género femenino registradas, como es el caso de la nota de 3.1, 3.2, 4.5 entre otras. 
+
+
+# PAPA-Edad {.tabset}
+
+## Gráfica
 ```{r}
 #Se seleccionan las fechas de nacimiento y los papas sin NA 
 papaedad <- sqldf('SELECT fecha_dep,PAPA FROM encuesta_habitos WHERE PAPA IS NOT NULL')
@@ -677,10 +776,15 @@ ggplot(tablaedadpapa, aes(fill=fecha_dep, x=PAPA, y=Cuantos))+
   theme(legend.title = element_blank())
 ```
 
-# PAPA-Carrera
 
+## Análisis descriptivo:
+
+En el gráfico se puede observar los intervalos de las diferentes notas del PAPA discriminado por la Edad. Se observa que las personas con edades alrededor de los 19 a 20 años tiene una nota del PAPA de entre el 3.5 y 4, mientras que las personas con mayor edad como 37 y 38 años tienen un PAPA más bajo, de 3.0 a 3.2. Un caso interesante es la persona con una edad de 64 años que tiene una nota del PAPA en 3.9. Como observación, las personas cuya nota del PAPA es 4.7 siendo esta la nota más alta, tienen 18 años. 
+
+# PAPA-Carrera {.tabset}
+
+## Gráfica
 ```{r}
-
 #Query en sql para poder sacar datos necesarios para graficar
 query <- sqldf('SELECT carrera_dep,AVG(PAPA) from encuesta_habitos GROUP BY carrera_dep')
 #Lastimosamente no supe como automatizar para que quede organizado para graficar
@@ -704,8 +808,15 @@ radarchart(para_graficar,axistype=1 ,
     vlcex=0.8, title=paste("Promedio del PAPA por carrera"), cex.main=1 )
 ```
 
-# PAPA-Estrato
 
+
+## Análisis descriptivo:
+
+En el gráfico se muestra la distribución de la nota del PAPA discriminado por Carrera. Se observa que para las carreras correspondientes a Ingeniería Industrial y Matemáticas el promedio de la nota del PAPA de los estudiantes de dichas carreras es ligeramente mayor que para los estudiantes del resto de carreras. Ingeniería Industrial y Matemáticas cuentas con un PAPA alrededor de 4, mientras que carreras como Ingeniería Biológica tienen un PAPA aproximadamente de 3.5.
+
+# PAPA-Estrato {.tabset}
+
+## Gráfica
 ```{r}
 #Tabla del papa segun el estrato
 papaxes <- table(encuesta_habitos$PAPA, encuesta_habitos$estrato)
@@ -719,8 +830,14 @@ ggplot(graf0, aes(fill=Var2, x=Var1,  y=Freq))+
 ```
 
 
-# PAPA-Computador de mesa
 
+## Análisis descriptivo:
+
+En la gráfica se puede observar la distribución de la variable PAPA discriminada por Estrato. Se puede notar que la persona con una clasificación de Estrato 0 su nota del PAPA es mucho más baja. Paras las personas de Estrato 1 se pueden ver las cantidades bastantes dispersas. Hay una mayor concentración de personas de Estratos 2 y 3 en los rangos de entre 3.5 y 4. Para las personas que corresponden al Estrato 4 su rango va desde 3.4 a 3.8 y por último, la persona de Estrato 5 tiene un PAPA de 3.8, siento esta nota la que mayor número de personas tiene.
+
+# PAPA-Computador de mesa {.tabset}
+
+## Gráfica
 ```{r}
 #Tabla del papa segun el computador de mesa
 papaxpc <- table(encuesta_habitos$PAPA, encuesta_habitos$computador_mesa)
@@ -733,8 +850,15 @@ ggplot(graf, aes(fill=Var2, x=Var1,  y=Freq))+
   geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)#Lineas punteadas en cada unidad
 ```
 
-# PAPA-Portatil
 
+
+## Análisis descriptivo:
+
+Como se puede ver en la gráfica de PAPA discriminado por computador de mesa, si cogemos un intervalo en los desempeños más bajos de 3 a 3.6, se puede ver que la mayoría no tiene un computador de mesa, pero esto mismo sucede en los desempeños más alto como lo son el intervalo de 4.1 a 4.7 y tienen los más altos promedios y de esto evidenciamos que tener un computador de mesa o no tenerlo, no es un factor que afecte el desempeño del PAPA.
+
+# PAPA-Portatil {.tabset}
+
+## Gráfica
 ```{r}
 #Igual al anterior
 papaxpr <- table(encuesta_habitos$PAPA, encuesta_habitos$portatil)
@@ -745,8 +869,15 @@ ggplot(graf2, aes(fill=Var2, x=Var1,  y=Freq))+
   geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)
 ```
 
-# PAPA-Internet
 
+
+## Análisis descriptivo:
+
+Como se puede notar en la gráfica de PAPA discriminado por portátil, se muestra que no es necesario tener un portátil, para tener un buen desempeño, ya que se ve que algunos de los estudiantes con mejores promedios, no poseen uno y aún así, logran obtener el mejor promedio. 
+
+# PAPA-Internet {.tabset}
+
+## Gráfica
 ```{r}
 #Igual al anterior
 papaxin <- table(encuesta_habitos$PAPA, encuesta_habitos$internet)
@@ -757,8 +888,14 @@ ggplot(graf3, aes(fill=Var2, x=Var1,  y=Freq))+
   geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)
 ```
 
-# PAPA-Smartphone
 
+## Análisis descriptivo:
+
+Como se puede notar en la gráfica de PAPA discriminado por internet, vemos que aunque se tenga un internet que sea de plan de datos de celular o alquilado, no hace que esto dependa que tan bien nos desempeñemos, por lo que se muestra en el promedio de 4 y 4.3, respectivamente, que es una demostración de lo dicho anteriormente. También vemos que los estudiantes que tiene un internet propio, están ubicados desde el promedio más bajo, hasta el promedio más alto, lo cual quiere decir, que tenerlo propio, no determina el  desempeño de los estudiantes.
+
+# PAPA-Smartphone {.tabset}
+
+## Gráfica
 ```{r}
 #Igual al anterior
 papaxsp <- table(encuesta_habitos$PAPA, encuesta_habitos$smartphone)
@@ -768,8 +905,15 @@ ggplot(graf4, aes(fill=Var2, x=Var1,  y=Freq))+
   geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)
 ```
 
-# PAPA-Origen del COVID-19
 
+
+## Análisis descriptivo:
+
+Como se puede observar en la gráfica del PAPA discriminado por Smartphone, se puede ver que desde el desempeño más bajo, como lo son el promedio de 3, los estudiantes poseen un Smartphone, pero el desempeño más alto, que son tiene un promedio en 47, también lo tienen, lo cual indica que el tener un Smartphone, no afecta o mejora el desempeño del PAPA.
+
+# PAPA-Origen del COVID-19 {.tabset}
+
+## Gráfica
 ```{r}
 #Igual al anterior
 papaxcovid <- table(encuesta_habitos$PAPA, encuesta_habitos$origen_covid_19)
@@ -783,8 +927,15 @@ ggplot(graf5, aes(fill=Var2, x=Var1,  y=Freq))+
 #El theme ajusta el tamaño de la leyenda y las margenes
 ```
 
-# PAPA-Estadisticas del gobierno
 
+
+## Análisis descriptivo: 
+
+Como se muestra en la gráfica de PAPA discriminado por Origen del COVID-19, se puede notar que, las respuestas varían mucho, y determinar de si su promedio varía según las respuestas o respuesta que señaló, no tiene relación porque hay estudiantes con un PAPA, muy bajo, y otros estudiantes con un PAPA más alto, que señalaron la o las mismas respuestas.
+
+# PAPA-Estadisticas del gobierno {.tabset}
+
+## Gráfica
 ```{r}
 #Igual que el anterior
 papaxstats <- table(encuesta_habitos$PAPA, encuesta_habitos$estad_gov)
@@ -796,12 +947,62 @@ ggplot(graf6, aes(fill=Var2, x=Var1,  y=Freq))+
   scale_fill_brewer(palette = "Set3")#Colores
 ```
 
-# PAPA-Hábitos
 
-PENDIENTE
 
-# PAPA-Aleatorio
+## Análisis descriptivo:
 
+Como se puede observar en la gráfica del PAPA discriminado por Estadísticas del gobierno, según lo que se puede ver en la gráfica, si cogemos el PAPA más bajo, vemos que la mayoría dice que no, y si cogemos el PAPA más alto, pasa lo mismo, pero esto varía mucho, en cada promedio, lo cual nos dice que tener un alto PAPA o no tenerlo, va a ser muy distinto de determinar que tanto se crea en las estadísticas que muestra el gobierno o se muestre escépticos. 
+
+# PAPA-Hábitos {.tabset}
+
+## Grafica
+```{r, fig.height=8, fig.width=10}
+dfhabitos <-  pivot_longer(encuesta_habitos, habito_1:habito_17,
+               names_to = "num_habito",
+               values_to = "habito",
+               values_drop_na = TRUE)
+d<-gsub('^Algunas.*gos.$',' Estudia con amigos y solo', dfhabitos$habito)
+d<-gsub('^Escucha\\D*estudia.$','Estudia con música',d)
+d<-gsub('^Estudia.*compañeros.$','Estudia solo soluciones',d)
+d<-gsub('^Estudia.*anterior.*examen.$','Estudia solo el día anterior',d )
+d<-gsub('^Estudia.*misma.*estudio.$','Ve temas distintos en una sesión',d )
+d<-gsub('^Hace.*horario.$','Horario estricto',d )
+d<-gsub('^Lee.*texto.$','Lee varias veces un capitulo',d )
+d<-gsub('^Los.*estudio.$','Ejercicios con amigos',d )
+d<-gsub('^Prefiere.*ejercicios.$','Vistazo a muchos ejercicios resueltos',d )
+d<-gsub('^Prefiere.*resueltos.$','Pocos ejercicios bien entendidos',d )
+d<-gsub('^Resuelve.*anticipadamente.$','Hace ejercicios sin ver las respuestas',d )
+d<-gsub('.*lugar.*fijo.*','Estudia en lugar fijo',d )
+d<-gsub('^Solo.*resolver.$','Pregunta a amigos por ejercicios que no pudo',d )
+d<-gsub('^Toma.*continuo.$','Hace pausas activas',d )
+d<-gsub('^Tomas.*clase.$','Transcribe ejercicios de clase',d )
+d<-gsub('^Usa.*resueltos.$','Ve ejercicios hechos en solucionarios',d )
+dfhabitos$habito<-d
+par(mar=c(5.1, 18, 4.1, 2.1))
+boxplot(PAPA ~ habito, data = dfhabitos, las = 1,
+        xlab = "Promedio Académico Ponderado Acumulado", ylab = "", 
+        varwidth = TRUE,
+        horizontal = TRUE,
+        notch = TRUE,
+        cex.text = 0.7,
+        col = "wheat2"
+        )
+abline(v=c(3,3.5,4,4.5), col='grey80', lty='dotted')
+media<- mean(encuesta_habitos$PAPA,na.rm = TRUE)
+abline(v=media,col='red',lwd=2)
+## La media es de 3.7
+```
+
+
+
+## Analisis descriptivo:
+
+En la gráfica se pueden observar diferentes boxplot de la variable Hábitos relacionada con el desempeño académico PAPA. Se observa claramente como los estudiantes que tienen algunos de estos hábitos de estudio se encuentran muy por debajo de la media, como lo son el ver muchos ejercicios resueltos, memorizar ejercicios y ver ejercicios hechos en solucionarios. Por el contrario, hábitos como un horario estricto y hacer ejercicios sin ver las respuestas muestran un promedio mucho más alto. Un caso interesante es el hábito de estudiar con amigos que muestra un promedio muy por encima de la media general, pero carece de amplitud y, además tiene datos atípicos muy importantes, como el promedio de 3.0.
+
+
+# PAPA-Aleatorio {.tabset}
+
+## Gráfica
 ```{r}
 #Igual que los anteriores
 papaxal <- table(encuesta_habitos$PAPA, encuesta_habitos$aleatorio)
@@ -812,3 +1013,13 @@ ggplot(graf7, aes(fill=Var2, x=Var1,  y=Freq))+
   geom_hline(yintercept = 0:20, color="gray",linetype="dashed", size=0.2)+ 
   scale_fill_brewer(palette = "Spectral")#Colores
 ```
+
+
+## Análisis descriptivo:
+
+En el gráfico se muestra la distribución de la nota del PAPA discriminado por la variable correspondiente a “Número aleatorio”. El número aleatorio que se ve con mayor frecuencia es el número 7, pero respecto al PAPA se ve bastante disperso, caso diferente se observa con el número 10, cuya concentración está en las personas que tiene un PAPA igual a 3.8 y lo mismo sucede con el número 2, donde la concentración está en la nota del PAPA igual a 3.6.
+
+
+# Conclusiones: (pendiente)
+
+# Recomendaciones: (pendiente)

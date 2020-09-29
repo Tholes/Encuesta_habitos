@@ -1116,6 +1116,7 @@ ggplot(graf7, aes(fill=Var2, x=Var1,  y=Freq))+
 
 
 
+
 ## Análisis descriptivo:
 
 En el gráfico se muestra la distribución de la nota del PAPA discriminado por la variable correspondiente a “Número aleatorio”. El número aleatorio que se ve con mayor frecuencia es el número 7, pero respecto al PAPA se ve bastante disperso, caso diferente se observa con el número 10, cuya concentración está en las personas que tiene un PAPA igual a 3.8 y lo mismo sucede con el número 2, donde la concentración está en la nota del PAPA igual a 3.6.
@@ -1127,9 +1128,16 @@ Es bueno realizar trabajos en equipo porque se comparten ideas, se ayudan mutuam
 Con respecto a los temas que se tocaron en el trabajo como tal podemos decir que:
 
 * La depuración de la base de datos es esencial para poder facilitar el manejo de estos luego
-* Cuando se tienen variable que representen fechas
+* Cuando se tienen variables que representen fechas es vital tenerl en un formato uniforme todos los datos de la variable para su conversion a tipo date
+* Es importante la identificación de que tipo de dato se necesita que sea cada variable para evitar problemas con el trabajo de estas
+* Un tipo de depuración eficaz para resumir o modificar textos son las expresiones regulares, lo cual ahorra mucho tiempo a comparación de si se hiciera a mano
+*El apoyo de diferentes paquetes o bibliotecas externas puede llegar a ser de gran relevancia para realizar con mejor eficiencia lo que se tiene planeado, ya sea a la hora de graficar o en la adecuacion de los datos
+* Tipos de graficas como los boxplot nos dan más información de la que parece, con sus distintos apartados que nos muestran informacion atipica (outliers) o tambien la separacion por cuartiles
 
 # Recomendaciones: 
 
-- Fue bueno realizar esta actividad, y aunque logramos desarrollarla con éxito, me parece que un taller tan largo y complejo, como lo fue este, debería consideradarse más, ya que en un trabajo en equipo, no estamos solo contando con el tiempo que tenemos nosotros,  sino con el de los otros y esto lo hace más difícil 
+- Fue bueno realizar esta actividad y aunque logramos desarrollarla con éxito, se aprecia que un taller tan largo y complejo, como lo fue este, debería consideradarse más, ya que en un trabajo en equipo no estamos solo contando con el tiempo que tenemos nosotros,  sino con el de los otros y esto lo hace más difícil por lo que para agilizar con su elaboración es necesario contar con que:
+* La base de datos este en perfectas condiciones con sus respectivas correcciones y modificaciones
+* Tener presente las distintas librerias  que se necesitan para realizar correctamente el trabajo
+* Utilizar distintos tipos de graficas dependiendo de la informacion que se trate de enfatizar y con qué enfoque
 

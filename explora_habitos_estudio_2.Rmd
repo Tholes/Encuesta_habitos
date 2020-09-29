@@ -1,8 +1,16 @@
 ---
 title: "Taller 1 en grupo"
-author: "Alejandro Bedoya Taborda\nAngie Melissa Montoya Urrego\nCristian Camilo Henao Rojas\nMariana Arias Montoya\nLuis Felipe Marin Buitrago"
-date: "17/9/2020"
-output: html_document
+author: 
+- "Alejandro Bedoya Taborda"
+- "Angie Melissa Montoya Urrego" 
+- "Cristian Camilo Henao Rojas" 
+- "Mariana Arias Montoya" 
+- "Luis Felipe Marin Buitrago"
+date: "28/9/2020"
+output: 
+  html_document:
+    theme: yeti
+        
 ---
 
 ```{r setup, include=FALSE}
@@ -765,6 +773,7 @@ plot.title = element_text(family = "Helvetica", face = "bold", size = (20),hjust
 ## Tabla de frecuencia
 ```{r}
 kable(table(b),col.names = c('Hábito','Frecuencia'),align = 'lc')
+
 ```
 
 ## Análisis descriptivo:
@@ -1105,11 +1114,22 @@ ggplot(graf7, aes(fill=Var2, x=Var1,  y=Freq))+
 ```
 
 
+
+
 ## Análisis descriptivo:
 
 En el gráfico se muestra la distribución de la nota del PAPA discriminado por la variable correspondiente a “Número aleatorio”. El número aleatorio que se ve con mayor frecuencia es el número 7, pero respecto al PAPA se ve bastante disperso, caso diferente se observa con el número 10, cuya concentración está en las personas que tiene un PAPA igual a 3.8 y lo mismo sucede con el número 2, donde la concentración está en la nota del PAPA igual a 3.6.
 
 
-# Conclusiones: (pendiente)
+# Conclusiones:
 
-# Recomendaciones: (pendiente)
+Es bueno realizar trabajos en equipo porque se comparten ideas, se ayudan mutuamente, se toman decisiones sobre que es lo mejor para hacer, se pueden disminuir las debilidades y potenciar las fortalezas, se pueden pensar mejores estrategias, para que todo quede mejor. La actividad la desarrollamos en conjunto, las dudas que se presentaban las discutíamos entre nosotros mismos hasta llegar a una solución precisa. El trabajo en equipo fluyó, puesto que dividimos la actividad en partes que cada uno desarrollaba, lo que hizo que fuera aún más efectivo. El tema fue interesante para la mayoría de nosotros, por esto, lo hicimos con más voluntad. 
+Con respecto a los temas que se tocaron en el trabajo como tal podemos decir que:
+
+* La depuración de la base de datos es esencial para poder facilitar el manejo de estos luego
+* Cuando se tienen variable que representen fechas
+
+# Recomendaciones: 
+
+- Fue bueno realizar esta actividad, y aunque logramos desarrollarla con éxito, me parece que un taller tan largo y complejo, como lo fue este, debería consideradarse más, ya que en un trabajo en equipo, no estamos solo contando con el tiempo que tenemos nosotros,  sino con el de los otros y esto lo hace más difícil 
+

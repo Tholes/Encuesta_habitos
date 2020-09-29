@@ -1121,6 +1121,94 @@ ggplot(graf7, aes(fill=Var2, x=Var1,  y=Freq))+
 
 En el gráfico se muestra la distribución de la nota del PAPA discriminado por la variable correspondiente a “Número aleatorio”. El número aleatorio que se ve con mayor frecuencia es el número 7, pero respecto al PAPA se ve bastante disperso, caso diferente se observa con el número 10, cuya concentración está en las personas que tiene un PAPA igual a 3.8 y lo mismo sucede con el número 2, donde la concentración está en la nota del PAPA igual a 3.6.
 
+# Hábitos contradictorios {.tabset}
+
+```{r}
+nestudiantes <- nrow(encuesta_habitos)
+pocosVSresueltos <-c()
+soloVSamigos <-c()
+
+for (i in 1:nestudiantes) {
+  if ('Prefiere dar un vistazo a ejercicios resueltos de todos los posibles ejercicios.' %in%  c(encuesta_habitos[i,15:31])  &  'Prefiere pocos ejercicios bien entendios a dar un vistazo a muchos ejercicios resueltos.' %in% c(encuesta_habitos[i,15:31])  ){
+    pocosVSresueltos<- c(pocosVSresueltos,i)
+  }
+  if ('Estudia solo.' %in%  c(encuesta_habitos[i,15:31])  &  'Estudia con amigos.' %in% c(encuesta_habitos[i,15:31])  ){
+    soloVSamigos<- c(soloVSamigos,i)
+  }
+}
+
+
+pocosVSresueltos <- data.frame(pocosVSresueltos)
+soloVSamigos <- data.frame(soloVSamigos)
+query_xd <- sqldf('SELECT PAPA FROM encuesta_habitos INNER JOIN pocosVSresueltos WHERE encuesta_habitos.consecutivo=pocosVSresueltos.pocosVSresueltos')
+
+```
+## Contradicción 1
+
+Prefiere dar un vistazo a ejercicios resueltos de todos los posibles ejercicios y prefiere pocos ejercicios bien entendios a dar un vistazo a muchos ejercicios resueltos
+
+```{r}
+ggplot(query_xd, aes(x = seq(0, 100, length.out = 13), y = query_xd$PAPA)) +
+  geom_violin(fill = "#52b788", alpha = 0.8) +
+  theme_bw() +
+  xlab("") + ylab('PAPA') + ggtitle('Contradicción ejercicios') +
+  theme(plot.title = element_text(
+    family = "Helvetica",
+    face = "bold",
+    size = (20),
+    hjust = .5
+  )) +
+  coord_cartesian(ylim = c(3, 5))  +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.title.y = element_text(size = 15, vjust =       1.3),
+    axis.text.y = element_text(
+      family = "Helvetica",
+      face = "bold",
+      size = (10)
+    )
+  )
+```
+
+### Analisis
+
+Observando la gráfica se puede notar que los estudiantes que marcaron como hábitos de estudio esta contradicción cuenta con un desempeño académico PAPA alrededor de 3.8.  Además de esto tiene un extremo atípico en 3.0.   
+
+## Contradicción 2
+
+Estudia solo y estudia con amigos
+
+
+```{r}
+query_xd2 <- sqldf('SELECT PAPA FROM encuesta_habitos INNER JOIN soloVSamigos WHERE encuesta_habitos.consecutivo=soloVSamigos.soloVSamigos')
+ggplot(query_xd2, aes(x = seq(0, 100, length.out = 9), y = query_xd2$PAPA)) +
+  geom_violin(fill = "#ff5d8f", alpha = 0.8) +
+  theme_bw() +
+  xlab("") + ylab('PAPA') + ggtitle('Estudiar con amigos o solo') +
+  theme(plot.title = element_text(
+    family = "Helvetica",
+    face = "bold",
+    size = (20),
+    hjust = .5
+  )) +
+  coord_cartesian(ylim = c(3, 5))  +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.title.y = element_text(size = 15, vjust =       1.3),
+    axis.text.y = element_text(
+      family = "Helvetica",
+      face = "bold",
+      size = (10)
+    )
+  )
+```
+
+### Analisis
+
+Observando la gráfica se puede notar que los estudiantes que marcaron como hábitos de estudio esta contradicción cuenta con un desempeño académico PAPA alrededor de 3.8.  Además de esto tiene extremos atípicos en 3.0, 3.9 y 4.0.   
+
 
 # Conclusiones:
 
